@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}PHP发布结果{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>PHP发布结果</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>项目管理</a>
+            </li>
+            <li class="active">
+            <strong>PHP发布结果</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+{% block col2 %}
+<li class="active">
+    <a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">项目管理</span><span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse in">
+        <li><a href={% url 'project' %}>项目信息</a></li>
+        <li><a href={% url 'php' %}>php测试发布</a></li>
+        <li><a href={% url 'nodejs' %}>Node.js测试发布</a></li>
+        <li><a href={% url 'java' %}>Java测试发布</a></li>
+        <li><a href={% url 'svn' %}>运维版本发布</a></li>
+        <li><a href={% url 'release_record' %}>发布记录</a></li>
+    </ul>
+</li>
+{% endblock %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="text-center article-title">
+                            <h1>
+                                PHP测试发布结果
+                            </h1>
+                        </div>
+                        <p>
+                            {{ result|safe }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

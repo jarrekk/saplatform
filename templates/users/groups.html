@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | 用户组管理{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>用户组管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>其他</a>
+            </li>
+            <li class="active">
+            <strong>用户组管理</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+{% for i in groups %}
+    <div class="col-lg-3" id="box-{{ i.id }}">
+        <div class="contact-box center-version">
+
+            <a href={% url 'edit_group' i.id %}>
+
+                <br>
+                <h3><div class="font-bold">{{ i.name }}</div></h3>
+                <br>
+
+            </a>
+            <div class="contact-box-footer">
+                <div class="m-t-xs btn-group">
+                    <a class="btn btn-xs btn-warning btn-outline" href={% url 'group2perm' i.id %}><i class="fa fa-paste"></i> 权限</a>
+                    <button class="btn btn-xs btn-danger btn-outline demo3" id="btn-delete-{{ i.id }}" ><i class="fa fa-warning"></i> 删除</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endfor %}
+
+    <div class="col-lg-3">
+        <div class="contact-box center-version">
+
+            <a href={% url 'add_group' %}>
+                <br>
+                <h3><i class="fa fa-plus"></i></h3>
+                <br>
+            </a>
+            <div class="contact-box-footer">
+                <div class="m-t-xs btn-group">
+                    <a class="btn btn-xs btn-info btn-outline" href={% url 'index' %}><i class="fa fa-reply"></i> 返回</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footjs %}
+<script>
+$(document).ready(function () {
+    {% for i in groups %}
+    $('#btn-delete-{{ i.id }}').click(function () {
+                    swal({
+                        title: "确定删除?",
+                        text: "此操作不可撤销!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        closeOnConfirm: false,
+                        closeOnCancel: false },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            swal("成功!", "用户{{ i.nickname }}已删除.", "success");
+                            $.get("{% url 'delete_group' i.id %}");
+                            $('#box-{{ i.id }}').hide();
+                        } else {
+                            swal("已取消", "请点击按钮返回", "error");
+                        }
+                    });
+
+    });
+    {% endfor %}
+});
+</script>
+{% endblock %}

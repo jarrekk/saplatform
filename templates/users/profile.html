@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | 个人信息{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>个人信息</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>其他</a>
+            </li>
+            <li class="active">
+            <strong>个人信息</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+<div class="col-md-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>用户信息</h5>
+                        </div>
+                        <div>
+                            <form class="form-horizontal" enctype="multipart/form-data" role="form" method="POST" action={% url 'profile' %} xmlns="http://www.w3.org/1999/html">
+                            {% csrf_token %}
+                            <div class="ibox-content profile-content">
+                            <div class="row">
+                            <div class="col-md-6 col-md-offset-1">
+                                <div class="image-crop">
+                                    {% if the_user.headimg %}
+                                    <img src="/{{ the_user.headimg }}">
+                                    {% else %}
+                                    <img src="/static/images/touxiang/tou.gif">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-md-offset-7">
+                                <div class="btn-group">
+                                    <label title="Upload image file" for="inputImage" class="btn btn-primary">
+                                        <input type="file" accept="image/*" name={{ form.headimg.name }} id="inputImage" class="hide">
+                                        上传新头像
+                                    </label>
+                                </div>
+                            </div>
+
+                                <h4 class="text-center"><strong>{{ the_user.username }}</strong></h4>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">昵称</label>
+                                    <div class="col-md-6">{{ form.nickname }}{{ form.nickname.errors }}</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">姓</label>
+                                    <div class="col-md-3">{{ form.first_name }}{{ form.first_name.errors }}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">名</label>
+                                    <div class="col-md-3">{{ form.last_name }}{{ form.last_name.errors }}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"><i class="fa fa-phone"></i></label>
+                                    <div class="col-md-6">{{ form.tel }}{{ form.tel.errors }}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"><i class="fa fa-envelope-o"></i></label>
+                                    <div class="col-md-6">{{ form.email }}{{ form.email.errors }}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">性别</label>
+                                    <div class="col-md-6">
+                                        {% for i in form.sex %}
+                                        <div class="i-checks checkbox-inline"><label> <input type="radio" name={{ form.sex.name }} value={{ i.choice_value }}
+                                                {% if form.sex.value == i.choice_value %} checked='checked'{% endif %}
+                                        > <i></i> {{ i.choice_label }} </label></div>
+                                        {% endfor %}
+                                        {{ form.environment.errors }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"><i class="fa fa-map-marker"></i></label>
+                                    <div class="col-md-6">{{ form.city }}{{ form.city.errors }}</div>
+                                </div>
+                                <div class="form-group" id="data_1">
+                                <label class="col-md-3 control-label">生日</label>
+                                <div class="input-group date col-md-6">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    {{ form.birthday }}
+                                </div>
+                                    {{ form.birthday.errors }}
+                                </div>
+                                <div class="user-button">
+                                    <div class="row">
+                                        <div class="col-md-8 col-md-offset-2">
+                                            <button type="submit" class="btn btn-primary btn-outline btn-sm btn-block"><i class="fa fa-save"></i> 保存 </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                    </div>
+                </div>
+    </div>
+
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+                    <h4 class="m-b-xxs">用户权限</h4>
+                    {% if user.is_superuser %}
+                        <ul>
+                            <li class="text-left">超级管理员</li>
+                        </ul>
+                    {% else %}
+                    {% if user_perm_list %}
+                    <ul>
+                    {% for i in user_perm_list %}
+                        <li class="text-left">{{ i }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                        <ul>
+                            <li class="text-left">无权限</li>
+                        </ul>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+{#            <div class="ibox float-e-margins">#}
+{#                <div class="ibox-content text-center p-md">#}
+{#                    <h4 class="m-b-xxs">用户组权限</h4>#}
+{#                    {% if user.is_superuser %}#}
+{#                        <ul>#}
+{#                            <li class="text-left">超级管理员</li>#}
+{#                        </ul>#}
+{#                    {% else %}#}
+{#                    {% if group_perm_list %}#}
+{#                    <ul>#}
+{#                    {% for i in group_perm_list %}#}
+{#                        <li class="text-left">{{ i }}</li>#}
+{#                    {% endfor %}#}
+{#                    </ul>#}
+{#                    {% else %}#}
+{#                        <ul>#}
+{#                            <li class="text-left">无用户组权限</li>#}
+{#                        </ul>#}
+{#                    {% endif %}#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
+
+        </div>
+    </div>
+    </div>
+    {% endblock %}
+{% block footjs %}
+<script>
+    $(document).ready(function () {
+
+        var $image = $(".image-crop > img")
+            $($image).cropper({
+                aspectRatio: 0.0,
+                preview: ".img-preview",
+                done: function(data) {
+                    // Output the result data for cropping image.
+                }
+            });
+
+        var $inputImage = $("#inputImage");
+            if (window.FileReader) {
+                $inputImage.change(function() {
+                    var fileReader = new FileReader(),
+                            files = this.files,
+                            file;
+
+                    if (!files.length) {
+                        return;
+                    }
+
+                    file = files[0];
+
+                    if (/^image\/\w+$/.test(file.type)) {
+                        fileReader.readAsDataURL(file);
+                        fileReader.onload = function () {
+{#                            $inputImage.val("");#}
+                            $image.cropper("reset", true).cropper("replace", this.result);
+                        };
+                    } else {
+                        showMessage("Please choose an image file.");
+                    }
+                });
+            } else {
+                $inputImage.addClass("hide");
+            }
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+        $('#data_1 .input-group.date').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true,
+                format: "yyyy-mm-dd"
+            });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+{% endblock %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="text-center article-title">
+                            <h1>
+                                欢迎来到在家点点自动化运维平台
+                            </h1>
+                        </div>
+                        <p class="text-center">
+                            <img src="/static/images/zaijiadd.jpg" width="200" height="200">
+                            <ul>
+                                <li>登陆名:{{ username }}</li>
+                                <li>现在时间:{{ nowtime }}</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

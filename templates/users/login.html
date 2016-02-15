@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Autoops | Login</title>
+
+    <link href="/static/app/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/app/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="/static/app/css/animate.css" rel="stylesheet">
+    <link href="/static/app/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name"><img src="/static/images/Linux.png"></h1>
+
+            </div>
+            {% if error %}
+                <div class="alert alert-danger text-center">{{ error }}</div>
+            {% endif %}
+            <h3>欢迎来到Autoops</h3>
+            <p>这是一个非常有趣的平台,在这里你的工作将变得非常简单.
+            </p>
+            <strong>请登录</strong>
+            <form class="m-t" role="form" action={% url "login" %} method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.username }}
+                </div>
+                <div class="form-group">
+                    {{ form.password }}
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+
+                <a href={% url 'forget_password' %}><small>忘记密码?</small></a>
+{#                <p class="text-muted text-center"><small>Do not have an account?</small></p>#}
+{#                <a class="btn btn-sm btn-white btn-block" href="#">Create an account</a>#}
+            </form>
+            <p class="m-t"> <small>Auto SA platform &copy; 2016</small> </p>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="/static/app/js/jquery-2.1.1.js"></script>
+    <script src="/static/app/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

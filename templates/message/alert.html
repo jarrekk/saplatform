@@ -1,0 +1,37 @@
+<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+    <i class="fa fa-bell"></i>  <span class="label label-primary" id="count-info-num">{{ num }}</span>
+</a>
+<ul class="dropdown-menu dropdown-alerts" id="alert-list">
+    {% for i in alerts %}
+    <li id="alert-li-{{ i.id }}">
+        <a href="#" id="alert-a-{{ i.id }}">
+            <div>
+                <i class="fa fa-bookmark-o fa-fw"></i> {{ i.text }}
+                <span class="pull-right text-muted small">{{ i.gen_time }}</span>
+            </div>
+        </a>
+    </li>
+    <li class="divider"></li>
+    {% endfor %}
+{#    <li>#}
+{#        <div class="text-center link-block">#}
+{#            <a href="#">#}
+{#                <strong>See All Alerts</strong>#}
+{#                <i class="fa fa-angle-right"></i>#}
+{#            </a>#}
+{#        </div>#}
+{#    </li>#}
+</ul>
+<script>
+    $(document).ready(function(){
+    {% for i in alerts %}
+        $("#alert-a-{{ i.id }}").click(function(){
+            $.get("{% url 'delete_alert' i.id %}",function(){
+                $.get("{% url 'alert' %}",function(data){
+                    $("#alert").html(data);
+                });
+            });
+        });
+    {% endfor %}
+    });
+</script>

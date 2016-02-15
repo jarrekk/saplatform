@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | 项目信息{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>项目信息</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>项目管理</a>
+            </li>
+            <li class="active">
+            <strong>项目信息</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+{% block col2 %}
+<li class="active">
+    <a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">项目管理</span><span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse in">
+        <li><a href={% url 'project' %}>项目信息</a></li>
+        <li><a href={% url 'php' %}>php测试发布</a></li>
+        <li><a href={% url 'nodejs' %}>Node.js测试发布</a></li>
+        <li><a href={% url 'java' %}>Java测试发布</a></li>
+        <li><a href={% url 'svn' %}>运维版本发布</a></li>
+        <li><a href={% url 'release_record' %}>发布记录</a></li>
+    </ul>
+</li>
+{% endblock %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>项目信息  </h5>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+                <a class="close-link">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <table class="table table-hover">
+            {% if perms.main.add_project %}
+                <a href={% url "add_project" %} class="btn btn-outline btn-w-m btn-primary btn-sm">增加</a>
+            {% endif %}
+                <thead>
+                <tr>
+                    <th>项目名称</th>
+                    <th>代码</th>
+                    <th>仓库地址</th>
+                    <th>预发布服务器</th>
+                    <th>正式服务器</th>
+                    <th>远程服务器路径</th>
+                    <th>其他</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in projects %}
+                <tr class="default">
+                    <td>{{i.name}}</td>
+                    <td>{{i.code_type}}</td>
+                    <td>{{i.url}}</td>
+                    <td>{% for j in i.pre_host_list %}{% if forloop.last %}{{ j }}{% else %}{{ j }},</br>{% endif %}{% endfor %}</td>
+                    <td>{% for j in i.pro_host_list %}{% if forloop.last %}{{ j }}{% else %}{{ j }},</br>{% endif %}{% endfor %}</td>
+                    <td>{{i.server_path}}</td>
+                    <td>
+                        {% if perms.main.edit_project %}
+                        <a href={% url 'edit_project' i.id %} type="button" class="btn btn-outline btn-xs btn-warning dim"><i class="fa fa-paste">编辑</i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+            </div>
+    </div>
+{% endblock %}

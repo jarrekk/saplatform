@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | PHP测试发布{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>PHP测试发布</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>项目管理</a>
+            </li>
+            <li class="active">
+            <strong>PHP测试发布</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+{% block col2 %}
+<li class="active">
+    <a href="#"><i class="fa fa-cogs"></i> <span class="nav-label">项目管理</span><span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse in">
+        <li><a href={% url 'project' %}>项目信息</a></li>
+        <li><a href={% url 'php' %}>php测试发布</a></li>
+        <li><a href={% url 'nodejs' %}>Node.js测试发布</a></li>
+        <li><a href={% url 'java' %}>Java测试发布</a></li>
+        <li><a href={% url 'svn' %}>运维版本发布</a></li>
+        <li><a href={% url 'release_record' %}>发布记录</a></li>
+    </ul>
+</li>
+{% endblock %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>PHP测试发布</h5>
+
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+                <a class="close-link">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+
+            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
+            {% if perms.main.add_test %}
+                <a href={% url "add_test" %} class="btn btn-outline btn-w-m btn-primary btn-sm">增加</a>
+            {% endif %}
+                <thead>
+                <tr>
+
+                    <th data-toggle="true">测试例</th>
+                    <th>项目名称</th>
+                    <th>上次发布分支</th>
+                    <th data-hide="all">仓库地址</th>
+                    <th data-hide="all">服务器列表</th>
+                    <th data-hide="all">远程服务器路径</th>
+                    <th data-hide="all">发布前命令</th>
+                    <th data-hide="all">发布后命令</th>
+                    <th data-hide="all">发布</th>
+                    <th>其他</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in tests %}
+                <tr class="default">
+                    <td>{{i.name}}</td>
+                    <td>{{i.project}}</td>
+                    <td>{% if i.last_branch %}
+                        {{i.last_branch}}
+                        {% else %}
+                        {% endif %}
+                    </td>
+                    <td>{{i.repo_url}}</td>
+                    <td>{% for j in i.host_list %}{% if forloop.last %}{{ j }}{% else %}{{ j }},{% endif %}{% endfor %}</td>
+                    <td>{{i.server_path}}</td>
+                    <td>{{i.before_cmd}}</td>
+                    <td>{{i.after_cmd}}</td>
+                    <td>
+                    {% if perms.main.view_test %}
+                        <form method="get" action={% url 'php_result' i.id %} class="form-inline">
+                            <select class="select2_demo_1 form-control" name="branch">
+                                {% for j in i.branch %}
+                                    <option>{{ j }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="ladda-button btn btn-w-m btn-outline btn-success btn-sm" data-style="zoom-in"><i class="fa fa-send-o">发布</i> </button>
+                        </form>
+                    {% else %}
+                    没有权限
+                    {% endif %}
+                    </td>
+                    <td>
+                    {% if perms.main.edit_test %}
+                        <a href={% url 'edit_test' i.id %} class="btn btn-outline btn-xs btn-warning"><i class="fa fa-paste">编辑</i> </a>
+                    {% endif %}
+                    {% if perms.main.edit_test %}
+                        {% ifequal i.repo_type 'git' %}
+                            <a href={% url 'refresh_branch' i.id %} class="btn btn-xs btn-outline btn-info"><i class="fa fa-refresh">刷新</i> </a>
+                        {% else %}{% endifequal %}
+                    {% endif %}
+                    {% if perms.main.add_svncontrol %}
+                        <a href={% url 'code_save' i.id %} class="ladda-button btn btn-outline btn-xs btn-success" data-style="zoom-in"><i class="fa fa-upload">上传</i> </a>
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <ul class="pagination pull-right"></ul>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    </div>
+    </div>
+{% endblock %}
+{% block footjs %}
+<script>
+    $(document).ready(function() {
+        $(".select2_demo_1").select2();
+        $('.footable').footable();
+        $('.footable2').footable();
+
+        $( '.ladda-button' ).ladda( 'bind', { timeout: 200000 } );
+
+        // Bind progress buttons and simulate loading progress
+        Ladda.bind( '.progress-demo .ladda-button',{
+            callback: function( instance ){
+                var progress = 0;
+                var interval = setInterval( function(){
+                    progress = Math.min( progress + Math.random() * 0.1, 1 );
+                    instance.setProgress( progress );
+
+                    if( progress === 1 ){
+                        instance.stop();
+                        clearInterval( interval );
+                    }
+                }, 200 );
+            }
+        });
+    });
+
+</script>
+{% endblock %}

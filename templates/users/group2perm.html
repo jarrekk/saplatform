@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | 用户组权限{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>用户组权限</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>其他</a>
+            </li>
+            <li class="active">
+            <strong>用户组权限</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+<div class="col-md-10 col-md-offset-1">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>用户组权限</h5>
+                        </div>
+                        <div>
+                            <form class="form-horizontal" enctype="multipart/form-data" role="form" method="POST" action={% url 'group2perm' ID %} xmlns="http://www.w3.org/1999/html">
+                            {% csrf_token %}
+                            <div class="ibox-content profile-content">
+{#                                <label class="col-md-2 control-label">权限</label>#}
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">权限</label>
+                                    <div class="col-md-10">
+                                        {% for i in form.perm_list %}
+                                        <div class="i-checks checkbox-inline col-md-3"><label> <input type="checkbox" name={{ form.perm_list.name }} value={{ i.choice_value }}
+                                                {% if i.choice_value in form.perm_list.value %} checked='checked'{% endif %}
+                                        > <i></i> {{ i.choice_label }} </label></div>
+                                        {% endfor %}
+                                    {{ form.perm_list.errors }}
+                                    </div>
+                                </div>
+                                <div class="user-button">
+                                    <div class="row">
+                                        <div class="col-md-8 col-md-offset-2">
+                                            <button type="submit" class="btn btn-primary btn-outline btn-sm btn-block"><i class="fa fa-save"></i> 保存 </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                    </div>
+                </div>
+    </div>
+    </div>
+    </div>
+    {% endblock %}
+{% block footjs %}
+<script>
+    $(document).ready(function () {
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+    });
+</script>
+{% endblock %}
