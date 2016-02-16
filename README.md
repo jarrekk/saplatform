@@ -37,6 +37,8 @@
 
 ### 五、安装说明
 
+#### pip安装文件
+
 ``` bash
 # pip freeze
 amqp==1.4.9
@@ -48,8 +50,6 @@ celery==3.1.20
 certifi==2015.11.20.1
 decorator==4.0.6
 Django==1.8
-django-bootstrap-form==3.2
-django-global-permissions==0.2.2
 django-guardian==1.4.1
 dulwich==0.9.1
 funky==0.0.2
@@ -87,6 +87,153 @@ svn==0.3.36
 tornado==4.3
 traitlets==4.1.0
 uWSGI==2.0.12
+```
+
+#### gittle有点小问题，需要做如下额外配置：
+
+```
+pip uninstall dulwich
+```
+
+```
+pip install https://github.com/AaronO/dulwich/tarball/eebb032b2b7b982d21d636ac50b6e45de58b208b#egg=dulwich-0.9.1-2
+```
+
+```
+PY27LIB="/usr/local/lib/python2.7"
+curl -o $PY27LIB/dist-packages/dulwich/refs.py https://raw.githubusercontent.com/jelmer/dulwich/dulwich-0.9.7/dulwich/refs.py
+```
+
+#### celery添加环境变量：
+
+```
+export DJANGO_SETTINGS_MODULE=saplatform.settings
+```
+
+#### supervisord(python2.7)配置示例：
+
+``` ini
+[root@94_54 ~]# cat /etc/supervisord.conf
+[supervisord]
+http_port=/var/tmp/supervisor.sock ; (default is to run a UNIX domain socket server)
+;http_port=127.0.0.1:9001  ; (alternately, ip_address:port specifies AF_INET)
+;sockchmod=0700              ; AF_UNIX socketmode (AF_INET ignore, default 0700)
+;sockchown=nobody.nogroup     ; AF_UNIX socket uid.gid owner (AF_INET ignores)
+;umask=022                   ; (process file creation umask;default 022)
+logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)
+logfile_maxbytes=50MB       ; (max main logfile bytes b4 rotation;default 50MB)
+logfile_backups=10          ; (num of main logfile rotation backups;default 10)
+loglevel=info               ; (logging level;default info; others: debug,warn)
+pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
+nodaemon=false              ; (start in foreground if true;default false)
+minfds=1024                 ; (min. avail startup file descriptors;default 1024)
+minprocs=200                ; (min. avail process descriptors;default 200)
+
+;nocleanup=true              ; (don't clean up tempfiles at start;default false)
+;http_username=user          ; (default is no username (open system))
+;http_password=123           ; (default is no password (open system))
+;childlogdir=/tmp            ; ('AUTO' child log dir, default $TEMP)
+;user=chrism                 ; (default is current user, required if root)
+;directory=/tmp              ; (default is not to cd during start)
+;environment=KEY=value       ; (key value pairs to add to environment)
+
+[supervisorctl]
+serverurl=unix:///var/tmp/supervisor.sock ; use a unix:// URL  for a unix socket
+;serverurl=http://127.0.0.1:9001 ; use an http:// url to specify an inet socket
+;username=chris              ; should be same as http_username if set
+;password=123                ; should be same as http_password if set
+;prompt=mysupervisor         ; cmd line prompt (default "supervisor")
+
+; The below sample program section shows all possible program subsection values,
+; create one or more 'real' program: sections to be able to control them under
+; supervisor.
+
+;[program:theprogramname]
+;command=/bin/cat            ; the program (relative uses PATH, can take args)
+;priority=999                ; the relative start priority (default 999)
+;autostart=true              ; start at supervisord start (default: true)
+;autorestart=true            ; retstart at unexpected quit (default: true)
+;startsecs=10                ; number of secs prog must stay running (def. 10)
+;startretries=3              ; max # of serial start failures (default 3)
+;exitcodes=0,2               ; 'expected' exit codes for process (default 0,2)
+;stopsignal=QUIT             ; signal used to kill process (default TERM)
+;stopwaitsecs=10             ; max num secs to wait before SIGKILL (default 10)
+;user=chrism                 ; setuid to this UNIX account to run the program
+;log_stdout=true             ; if true, log program stdout (default true)
+;log_stderr=true             ; if true, log program stderr (def false)
+;logfile=/var/log/cat.log    ; child log path, use NONE for none; default AUTO
+;logfile_maxbytes=1MB        ; max # logfile bytes b4 rotation (default 50MB)
+;logfile_backups=10          ; # of logfile backups (default 10)
+
+
+; ==================================
+;  celery worker supervisor example
+; ==================================
+[program:celery]
+directory=/data/html/saplatform/
+command=/usr/local/python27/bin/celery worker -A saplatform --loglevel=INFO
+user=root
+numprocs=1
+stdout_logfile=/var/log/celery/worker.log
+stderr_logfile=/var/log/celery/worker.log
+autostart=true
+autorestart=true
+startsecs=10
+stopwaitsecs = 600
+killasgroup=true
+priority=998
+
+[program:tornado]
+directory=/data/html/saplatform/
+command=/usr/local/python27/bin/python2.7 /data/html/saplatform/t_server.py
+user=root
+numprocs=1
+stdout_logfile=/var/log/tornado/tornado.log
+stderr_logfile=/var/log/tornado/tornado.log
+autostart=true
+autorestart=true
+startsecs=10
+stopwaitsecs = 600
+killasgroup=true
+priority=998
+```
+
+t_server.py文件内容(tornado启动django)
+
+``` python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os
+import sys
+
+from tornado.options import options, define, parse_command_line
+# import django.core.handlers.wsgi
+from django.core.wsgi import get_wsgi_application
+import tornado.httpserver
+import tornado.ioloop
+import tornado.web
+import tornado.wsgi
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+os.environ['DJANGO_SETTINGS_MODULE'] = "saplatform.settings"
+
+define('port', type=int, default=8088)
+
+
+def main():
+    parse_command_line()
+
+    # wsgi_app = tornado.wsgi.WSGIContainer(django.core.handlers.wsgi.WSGIHandler())
+    wsgi_app = tornado.wsgi.WSGIContainer(get_wsgi_application())
+
+    tornado_app = tornado.web.Application([('.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app)), ])
+    server = tornado.httpserver.HTTPServer(tornado_app)
+    server.listen(options.port)
+    tornado.ioloop.IOLoop.instance().start()
+
+
+if __name__ == '__main__':
+    main()
 ```
 
 其次还需要安装redis，MySQL，saltstack，salt-api。
