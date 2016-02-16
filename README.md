@@ -89,4 +89,4 @@ traitlets==4.1.0
 uWSGI==2.0.12
 ```
 
-其次还需要安装redis，MySQL。
+其次还需要安装redis，MySQL，saltstack，salt-api。
