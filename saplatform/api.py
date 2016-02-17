@@ -245,6 +245,11 @@ def http_success(request, msg):
     return render_to_response('success.html', locals())
 
 
+def http_error(request, emg):
+    message = emg
+    return render_to_response('error.html', locals())
+
+
 def sizeformat(size, unit='B', Standard=1000):
     division = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB', 'BB', 'NB', 'DB', 'CB', 'XB']
     loc = division.index(unit.upper())

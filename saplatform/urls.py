@@ -22,6 +22,7 @@ urlpatterns = patterns('saplatform.views',
                        url(r'^message/', include('message.urls')),
                        # database model
                        url(r'^database/', include('database.urls')),
+
                        )
 
 handler404 = 'saplatform.views.server404'
