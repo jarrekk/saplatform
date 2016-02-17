@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | SQL文件上传{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>SQL文件上传</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>数据库管理</a>
+            </li>
+            <li class="active">
+            <strong>SQL文件上传</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+{% block col3 %}
+<li>
+    <a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span> <span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse in">
+        <li><a href={% url 'db_config' %}>数据库连接配置</a></li>
+        <li><a href={% url 'sqls' %}>SQL文件列表</a></li>
+        <li><a href={% url 'upload' %}>SQL文件上传</a></li>
+    </ul>
+</li>
+{% endblock %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>请上传SQL文件</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form id="my-awesome-dropzone" class="dropzone" action="#">
+                            {% csrf_token %}
+                            <div class="dropzone-previews"></div>
+                            <button type="submit" class="btn btn-primary pull-right">上传文件</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footjs %}
+    <script>
+        $(document).ready(function(){
+
+            Dropzone.options.myAwesomeDropzone = {
+
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 100,
+                maxFiles: 100,
+
+                // Dropzone settings
+                init: function() {
+                    var myDropzone = this;
+
+                    this.element.querySelector("button[type=submit]").addEventListener("click", function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        myDropzone.processQueue();
+                    });
+                    this.on("sendingmultiple", function() {
+                    });
+                    this.on("successmultiple", function(files, response) {
+                    });
+                    this.on("errormultiple", function(files, response) {
+                    });
+                }
+            }
+        });
+    </script>
+{% endblock %}

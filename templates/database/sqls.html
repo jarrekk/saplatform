@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | SQL文件列表{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>SQL文件列表</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>数据库管理</a>
+            </li>
+            <li class="active">
+            <strong>SQL文件列表</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+{% block col3 %}
+<li>
+    <a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span> <span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse in">
+        <li><a href={% url 'db_config' %}>数据库连接配置</a></li>
+        <li><a href={% url 'sqls' %}>SQL文件列表</a></li>
+        <li><a href={% url 'upload' %}>SQL文件上传</a></li>
+    </ul>
+</li>
+{% endblock %}
+{% block body %}
+    <body class="fixed-sidebar no-skin-config full-height-layout">
+{% endblock %}
+{% block content %}
+     <div class="fh-breadcrumb">
+                <div class="fh-column">
+                    <div class="full-height-scroll">
+                        <ul class="list-group elements-list">
+                            {% for sql in sql_list %}
+                            <li class="list-group-item">
+                                <a data-toggle="tab" href="#tab-{{ sql.id_num }}">
+                                    <small class="pull-right text-muted"> {{ sql.ctime }}</small>
+                                    <strong>{{ sql.name }}</strong>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="full-height">
+                    <div class="full-height-scroll white-bg border-left">
+                        <div class="element-detail-box">
+                            <div class="tab-content">
+                                {% for sql in sql_list %}
+                                <div id="tab-{{ sql.id_num }}" class="tab-pane">
+                                    <div class="pull-right">
+                                        <div class="tooltip-demo">
+                                            <form method="get" action={% url 'exec_sql' %} class="form-inline">
+                                                <input type="text" name="file_name" value="{{ sql.name }}" style="visibility:hidden" />
+                                                <select class="select2_demo_1 form-control" name="db_config">
+                                                {% for i in db_configs %}
+                                                    <option value="{{ i.id }}">{{ i.name }}</option>
+                                                {% endfor %}
+                                                </select>
+                                                <button id="btn-ex-{{ sql.id_num }}" class="btn btn-white btn-xs" data-toggle="tooltip" data-placement="top" title="" data-original-title="执行"><i class="fa fa-play-circle-o"></i> </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="small text-muted">
+                                        <i class="fa fa-clock-o"></i> {{ sql.ctime }}
+                                    </div>
+
+                                    <h1>SQL文件内容</h1>
+                                    <p>
+                                        {{ sql.content }}
+                                    </p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="wrapper wrapper-content animated fadeIn">
+</div>
+{% endblock %}
+
+{% block footjs %}
+<script>
+    $(document).ready(function() {
+        $(".select2_demo_1").select2();
+        $('.footable').footable();
+        $('.footable2').footable();
+
+        $( '.ladda-button' ).ladda( 'bind', { timeout: 200000 } );
+
+        // Bind progress buttons and simulate loading progress
+        Ladda.bind( '.progress-demo .ladda-button',{
+            callback: function( instance ){
+                var progress = 0;
+                var interval = setInterval( function(){
+                    progress = Math.min( progress + Math.random() * 0.1, 1 );
+                    instance.setProgress( progress );
+
+                    if( progress === 1 ){
+                        instance.stop();
+                        clearInterval( interval );
+                    }
+                }, 200 );
+            }
+        });
+    });
+
+</script>
+{% endblock %}

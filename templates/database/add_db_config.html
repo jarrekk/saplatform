@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | 添加数据库连接{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>添加数据库连接</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>数据库管理</a>
+            </li>
+            <li class="active">
+            <strong>添加数据库连接</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+{% block col3 %}
+<li>
+    <a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span> <span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse in">
+        <li><a href={% url 'db_config' %}>数据库连接配置</a></li>
+        <li><a href={% url 'sqls' %}>SQL文件列表</a></li>
+        <li><a href={% url 'upload' %}>SQL文件上传</a></li>
+    </ul>
+</li>
+{% endblock %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+<form class="form-horizontal" role="form" method="POST" action={% url 'add_db_config' %} xmlns="http://www.w3.org/1999/html">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="col-md-2 control-label">DB连接名</label>
+        <div class="col-md-4">{{ form.name }}{{ form.name.errors }}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">登陆认证</label>
+        <div class="col-md-3">{{ form.auth }}{{ form.auth.errors }}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">数据库地址</label>
+        <div class="col-md-4">{{ form.address }}{{ form.address.errors }}</div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-10 col-md-offset-2 controls-row">
+            <button type="submit" class="btn btn-success btn-outline m-b">增加</button>
+            <a href={% url 'db_config' %} class="btn btn-warning btn-outline m-b">取 消</a>
+        </div>
+    </div>
+</form>
+    </div>
+    </div>
+{% endblock %}

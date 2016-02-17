@@ -6,12 +6,14 @@ from django.contrib.auth.models import Permission, ContentType, User
 from saplatform.settings import *
 from message.models import Alert
 import os
+import time
 import requests
 import subprocess
 import logging
 import svn.remote
 import svn.local
 import paramiko
+import MySQLdb
 from gittle import Gittle, GittleAuth
 
 requests.packages.urllib3.disable_warnings()
@@ -117,6 +119,42 @@ class SaltApi:
         requests.post(url, headers=head1, verify=False)
 
 
+class File:
+    def __init__(self):
+        self.name = ''
+        self.ctime = ''
+        self.content = ''
+        self.id_num = ''
+
+    def get_info(self, file_path, id_num):
+        self.name = os.path.basename(file_path)
+        info = os.stat(file_path)
+        self.ctime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(info.st_ctime))
+        f = open(file_path)
+        self.content = f.read()
+        self.id_num = id_num
+
+
+def mysql_cmd(host, username, password, sql):
+    con = None
+    try:
+        con = MySQLdb.connect(host, username, password)
+        with con:
+            cur = con.cursor(MySQLdb.cursors.DictCursor)
+            cur.execute(sql)
+            rows = cur.fetchall()
+            result = rows
+            # for row in rows:
+            #     for key in row.keys():
+            #         print "%s %s" % (key, row[key])
+    except Exception, e:
+        result = e
+    finally:
+        if con:
+            con.close()
+    return result
+
+
 def admin_required():
     def _deco(func):
         def __deco(request, *args, **kwargs):
@@ -205,6 +243,11 @@ def my_render(template, data, request):
 
 def http_success(request, msg):
     return render_to_response('success.html', locals())
+
+
+def http_error(request, emg):
+    message = emg
+    return render_to_response('error.html', locals())
 
 
 def sizeformat(size, unit='B', Standard=1000):
@@ -319,7 +362,6 @@ def request_user_id(request):
 def alert(request, text):
     a = Alert(text=text, to_user_id=request_user_id(request))
     a.save()
-
 
 # def message(title, text, msg_type, to_user_id, from_user_id, status=0):
 #     m = Message(title=title, text=text, msg_type=msg_type, to_user_id=to_user_id, from_user_id=from_user_id,
