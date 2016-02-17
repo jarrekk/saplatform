@@ -245,11 +245,6 @@ def http_success(request, msg):
     return render_to_response('success.html', locals())
 
 
-def http_error(request, emg):
-    message = emg
-    return render_to_response('error.html', locals())
-
-
 def sizeformat(size, unit='B', Standard=1000):
     division = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB', 'BB', 'NB', 'DB', 'CB', 'XB']
     loc = division.index(unit.upper())
@@ -362,6 +357,7 @@ def request_user_id(request):
 def alert(request, text):
     a = Alert(text=text, to_user_id=request_user_id(request))
     a.save()
+
 
 # def message(title, text, msg_type, to_user_id, from_user_id, status=0):
 #     m = Message(title=title, text=text, msg_type=msg_type, to_user_id=to_user_id, from_user_id=from_user_id,

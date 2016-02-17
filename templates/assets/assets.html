@@ -47,7 +47,7 @@
 
         <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover dataTables-example" >
-        {% if perms.assets.add_assets %}
+        {% if perms.main.add_assets %}
         <a href={% url "add_assets" %} class="btn btn-outline btn-w-m btn-primary btn-sm">增加</a>
         {% endif %}
     <thead>
@@ -76,7 +76,7 @@
             </td>
             <td>{{i.system_type}}</td>
             <td>
-                {% if perms.assets.change_assets %}
+                {% if perms.main.change_assets %}
                 <a href={% url 'assets_init' i.id %} class="ladda-button btn btn-outline btn-xs btn-info" data-style="zoom-in">初 始 化</a>
                 <a href={% url 'assets_info' i.id %} class="ladda-button btn btn-outline btn-xs btn-success" data-style="zoom-in">获取信息</a>
                 <a href={% url 'edit_assets' i.id %} class="btn btn-outline btn-xs btn-warning">编  辑</a>

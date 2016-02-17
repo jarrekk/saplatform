@@ -49,7 +49,7 @@
         </div>
         <div class="ibox-content">
             <table class="table table-hover">
-            {% if perms.release.add_project %}
+            {% if perms.main.add_project %}
                 <a href={% url "add_project" %} class="btn btn-outline btn-w-m btn-primary btn-sm">增加</a>
             {% endif %}
                 <thead>
@@ -73,7 +73,7 @@
                     <td>{% for j in i.pro_host_list %}{% if forloop.last %}{{ j }}{% else %}{{ j }},</br>{% endif %}{% endfor %}</td>
                     <td>{{i.server_path}}</td>
                     <td>
-                        {% if perms.release.edit_project %}
+                        {% if perms.main.edit_project %}
                         <a href={% url 'edit_project' i.id %} type="button" class="btn btn-outline btn-xs btn-warning dim"><i class="fa fa-paste">编辑</i></a>
                         {% endif %}
                     </td>

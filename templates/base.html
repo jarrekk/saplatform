@@ -12,9 +12,7 @@
 
 </head>
 
-{% block body %}
 <body>
-{% endblock %}
     <div id="wrapper">
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
@@ -62,7 +60,7 @@
                     {% block col1 %}
                     <li>
                         <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">资产管理</span> <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
+                        <ul class="nav nav-second-level">
                             <li><a href={% url 'assets' %}>服务器资产</a></li>
                             <li><a href={% url 'auth' %}>认证管理</a></li>
                         </ul>
@@ -84,7 +82,7 @@
                     {% block col3 %}
                     <li>
                         <a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span> <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
+                        <ul class="nav nav-second-level collapse in">
                             <li><a href={% url 'db_config' %}>数据库连接配置</a></li>
                             <li><a href={% url 'sqls' %}>SQL文件列表</a></li>
                             <li><a href={% url 'upload' %}>SQL文件上传</a></li>
