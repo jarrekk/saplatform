@@ -2,4 +2,7 @@
 .idea
 .git
 .DS_Store
-*.pyc
+celerybeat-schedule
+
+
+db.sqlite3
