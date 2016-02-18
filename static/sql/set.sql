@@ -1,0 +1,1 @@
+set global character_set_database='utf8';
