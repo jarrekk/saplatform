@@ -85,4 +85,6 @@ def upload(request):
 
 def sql_result(request):
     sql_results = SQLResult.objects.all().order_by('-exec_time')
+    for i in sql_results:
+        i.result = eval(i.result)
     return render_to_response('database/sql_result.html', locals(), RequestContext(request))

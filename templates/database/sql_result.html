@@ -63,9 +63,34 @@
                                         {{ result.content }}
                                     </p>
                                     <h1>SQL执行结果</h1>
-                                    <p>
-                                        {{ result.result }}
-                                    </p>
+                                        <table class="table table-hover">
+                                        {% for unit in result.result %}
+                                            <p>
+                                            {% if forloop.first %}
+                                                <thead>
+                                                    <tr>
+                                                        {% for k,v in unit.items %}
+                                                        <th>{{ k }}</th>
+                                                        {% endfor %}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                {% for k, v in unit.items%}
+                                                    <td>{{ v }}</td>
+                                                {% endfor %}
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                {% for k, v in unit.items%}
+                                                    <td>{{ v }}</td>
+                                                {% endfor %}
+                                                </tr>
+                                                </tbody>
+                                            {% endif %}
+                                            </p>
+                                            {% endfor %}
+                                        </table>
                                 </div>
                                 {% endfor %}
                             </div>
