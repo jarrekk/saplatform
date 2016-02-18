@@ -9,3 +9,9 @@ class DbConfig(models.Model):
     auth = models.IntegerField(blank=True, null=True)
     desc = models.CharField(max_length=2014, blank=True, null=True)
 
+
+class SQLResult(models.Model):
+    content = models.CharField(max_length=1024, blank=True, null=True)
+    exec_time = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    result = models.CharField(max_length=1024, blank=True, null=True)
+    user = models.CharField(max_length=64, blank=True, null=True)
