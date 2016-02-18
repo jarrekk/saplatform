@@ -62,7 +62,8 @@ def exec_sql(request):
                          the_auth.username,
                          the_auth.password,
                          sql,
-                         request.user.username)
+                         request.user.username,
+                         file_name)
     return http_success(request, u'操作成功,请等待执行结果,在SQL执行结果查看.')
 
 
@@ -80,3 +81,8 @@ def upload(request):
         print 'ok'
         return http_success(request, 'ok')
     return render_to_response('database/upload.html', locals(), RequestContext(request))
+
+
+def sql_result(request):
+    sql_results = SQLResult.objects.all().order_by('-exec_time')
+    return render_to_response('database/sql_result.html', locals(), RequestContext(request))

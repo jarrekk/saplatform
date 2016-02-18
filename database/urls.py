@@ -8,5 +8,6 @@ urlpatterns = patterns('',
                        url(r'^sqls/$', 'database.views.sqls', name='sqls'),
                        url(r'^exec_sql/', 'database.views.exec_sql', name='exec_sql'),
                        url(r'^upload/$', 'database.views.upload', name='upload'),
+                       url(r'^sql_result/$', 'database.views.sql_result', name='sql_result'),
 
                        )

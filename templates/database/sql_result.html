@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | SQL执行记录{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>SQL执行记录</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>数据库管理</a>
+            </li>
+            <li class="active">
+            <strong>SQL执行记录</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+{% block col3 %}
+<li>
+    <a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span> <span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse in">
+{% endblock %}
+{% block body %}
+    <body class="fixed-sidebar no-skin-config full-height-layout">
+{% endblock %}
+{% block content %}
+     <div class="fh-breadcrumb">
+                <div class="fh-column">
+                    <div class="full-height-scroll">
+                        <ul class="list-group elements-list">
+                            {% for result in sql_results %}
+                            <li class="list-group-item">
+                                <a data-toggle="tab" href="#tab-{{ result.id }}">
+                                    <small class="pull-right text-muted"> {{ result.exec_time }}</small>
+                                    <strong>{{ result.sql_name }}</strong>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="full-height">
+                    <div class="full-height-scroll white-bg border-left">
+                        <div class="element-detail-box">
+                            <div class="tab-content">
+                                {% for result in sql_results %}
+                                <div id="tab-{{ result.id }}" class="tab-pane">
+                                    <div class="pull-right">
+                                        <div class="tooltip-demo">
+                                        </div>
+                                    </div>
+                                    <div class="small text-muted">
+                                        <i class="fa fa-clock-o"></i> {{ result.exec_time }}
+                                    </div>
+
+                                    <h1>SQL文件内容</h1>
+                                    <p>
+                                        {{ result.content }}
+                                    </p>
+                                    <h1>SQL执行结果</h1>
+                                    <p>
+                                        {{ result.result }}
+                                    </p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="wrapper wrapper-content animated fadeIn">
+</div>
+{% endblock %}
