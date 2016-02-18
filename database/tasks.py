@@ -22,6 +22,6 @@ def mysql_cmd_task(host, username, password, sql, user, sql_name):
     # return mysql_cmd(host, username, password, sql)
     result = mysql_cmd(host, username, password, sql)
     if not result:
-        result = ({'result': 'success'},)sl
+        result = ({'result': 'success'},)
     r = SQLResult(content=sql, result=str(result), user=user, sql_name=sql_name)
     r.save()
