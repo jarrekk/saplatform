@@ -77,5 +77,6 @@ def upload(request):
                 with open(file_path, 'w') as f:
                     for chunk in upload_file.chunks():
                         f.write(chunk)
+        print 'ok'
         return http_success(request, 'ok')
     return render_to_response('database/upload.html', locals(), RequestContext(request))
