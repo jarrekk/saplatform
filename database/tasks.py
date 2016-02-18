@@ -19,7 +19,6 @@ def mail_task(subject, message, from_email, recipient_list, fail_silently):
 @task
 def mysql_cmd_task(host, username, password, sql, email):
     # return mysql_cmd(host, username, password, sql)
-    
     result = mysql_cmd(host, username, password, sql)
     if not result:
         result = 'success'
