@@ -62,7 +62,7 @@ def exec_sql(request):
                          the_auth.username,
                          the_auth.password,
                          sql,
-                         request.user)
+                         request.user.username)
     return http_success(request, u'操作成功,请等待执行结果,在SQL执行结果查看.')
 
 
