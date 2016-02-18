@@ -27,3 +27,4 @@ def mysql_cmd_task(host, username, password, sql, email):
                      from_email=EMAIL_HOST_USER,
                      recipient_list=[email],
                      fail_silently=False)
+
