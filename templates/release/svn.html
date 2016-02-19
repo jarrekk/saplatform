@@ -64,9 +64,9 @@
             <td>{{ j.ci_time }}</td>
             <td>{{ j.desc }}</td>
             <td>
-                {% if perms.main.view_test %}
+                {% if perms.release.view_test %}
                 <a href={% url "svn_pre_result" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-success" data-style="zoom-in">预发布</a>
-                    {% if perms.main.view_project %}
+                    {% if perms.release.view_project %}
                 <a href={% url "svn_pro_result" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-primary" data-style="zoom-in">正  式</a>
                     {% endif %}
                 {% endif %}

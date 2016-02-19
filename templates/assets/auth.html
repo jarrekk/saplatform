@@ -41,7 +41,7 @@
         </div>
         <div class="ibox-content">
             <table class="table table-hover">
-                    {% if perms.main.add_userpass %}
+                    {% if perms.assets.add_userpass %}
                 <a href={% url "add_auth" %} class="btn btn-outline btn-w-m btn-primary btn-sm">增加</a>
                     {% endif %}
                 <thead>
@@ -59,7 +59,7 @@
                         <td>{{i.username}}</td>
                         <td>{{i.key}}</td>
                         <td>
-                            {% if perms.main.change_userpass %}
+                            {% if perms.assets.change_userpass %}
                             <a href={% url 'edit_auth' i.id %} class="btn btn-outline btn-xs btn-warning dim" type="button"><i class="fa fa-paste">编辑</i></a>
                             {% endif %}
                         </td>
