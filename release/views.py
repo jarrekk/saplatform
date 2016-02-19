@@ -23,7 +23,7 @@ def project(request):
     return render_to_response('release/project.html', locals(), RequestContext(request))
 
 
-@permission_required('project.add_project', login_url='perm_deny')
+@permission_required('release.add_project', login_url='perm_deny')
 def add_project(request):
     if request.method == "POST":
         form = ProjectForm(request.POST)
@@ -35,7 +35,7 @@ def add_project(request):
     return render_to_response('release/add_project.html', locals(), RequestContext(request))
 
 
-@permission_required('project.change_project', login_url='perm_deny')
+@permission_required('release.change_project', login_url='perm_deny')
 def edit_project(request, ID):
     the_project = Project.objects.get(id=str(ID))
     the_project.pre_host_list = list(eval(the_project.pre_host_list))
@@ -57,7 +57,7 @@ def svn(request):
     return render_to_response('release/svn.html', locals(), RequestContext(request))
 
 
-@permission_required('test.view_test', login_url='perm_deny')
+@permission_required('release.view_test', login_url='perm_deny')
 def svn_pre_result(request, ID):
     the_svn = SvnControl.objects.get(id=str(ID))
     the_project = Project.objects.get(name=the_svn.project)
@@ -86,8 +86,8 @@ def svn_pre_result(request, ID):
     return render_to_response('release/svn_pre_result.html', locals(), RequestContext(request))
 
 
-@permission_required('test.view_test', login_url='perm_deny')
-@permission_required('project.view_project', login_url='perm_deny')
+@permission_required('release.view_test', login_url='perm_deny')
+@permission_required('release.view_project', login_url='perm_deny')
 def svn_pro_result(request, ID):
     the_svn = SvnControl.objects.get(id=str(ID))
     the_project = Project.objects.get(name=the_svn.project)
@@ -136,7 +136,7 @@ def java(request):
     return render_to_response('release/java.html', RequestContext(request))
 
 
-@permission_required('test.view_test', login_url='perm_deny')
+@permission_required('release.view_test', login_url='perm_deny')
 def php_result(request, ID):
     try:
         branch = request.GET["branch"]
@@ -181,7 +181,7 @@ def java_result(request):
     return render_to_response('release/nodejs.html', RequestContext(request))
 
 
-@permission_required('test.add_test', login_url='perm_deny')
+@permission_required('release.add_test', login_url='perm_deny')
 def add_test(request):
     if request.method == "POST":
         form = TestForm(request.POST)
@@ -194,7 +194,7 @@ def add_test(request):
     return render_to_response('release/add_test.html', locals(), RequestContext(request))
 
 
-@permission_required('test.change_test', login_url='perm_deny')
+@permission_required('release.change_test', login_url='perm_deny')
 def edit_test(request, ID):
     the_test = Test.objects.get(id=ID)
     the_test.host_list = list(eval(the_test.host_list))
@@ -209,20 +209,7 @@ def edit_test(request, ID):
     return render_to_response('release/edit_test.html', locals(), RequestContext(request))
 
 
-# @permission_required('test.change_test', login_url='perm_deny')
-# def refresh_branch(request, ID):
-#     the_test = Test.objects.get(id=ID)
-#     the_auth = Auth.objects.get(id=the_test.auth)
-#     key = force_text(the_auth.key) if the_auth.key else ''
-#     if the_test.repo_type == 'git':
-#         local_path = os.path.join('/ops/test', the_test.server_path.lstrip('/'), str(the_test.id))
-#         git_co(the_test.repo_url, '', key, local_path)
-#         the_test.branch = str(git_branch(the_test.repo_url, key, local_path))
-#         the_test.save()
-#     return http_success(request, u'分支刷新成功')
-
-
-@permission_required('test.add_svncontrol', login_url='perm_deny')
+@permission_required('release.add_svncontrol', login_url='perm_deny')
 def code_save(request, ID):
     the_test = Test.objects.get(id=ID)
     desc = the_test.last_branch

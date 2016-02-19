@@ -33,7 +33,8 @@ perm_dict = {
     'group': u'组',
     'assets': u'资产',
     'auth': u'登录认证',
-    'dbconfig': u'数据库配置'
+    'dbconfig': u'数据库配置',
+    'sqlresult': u'SQL执行结果'
 }
 
 no_perm_list = ['auth', 'contenttypes', 'sessions', 'users', 'message', 'djcelery', 'guardian']

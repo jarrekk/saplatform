@@ -99,7 +99,7 @@ def auth(request):
     return render_to_response('assets/auth.html', locals(), RequestContext(request))
 
 
-@permission_required('auth.add_auth', login_url='perm_deny')
+@permission_required('assets.add_auth', login_url='perm_deny')
 def add_auth(request):
     if request.method == "POST":
         form = AuthForm(request.POST)
@@ -111,7 +111,7 @@ def add_auth(request):
     return render_to_response('assets/add_auth.html', locals(), RequestContext(request))
 
 
-@permission_required('auth.change_auth', login_url='perm_deny')
+@permission_required('assets.change_auth', login_url='perm_deny')
 def edit_auth(request, ID):
     the_auth = Auth.objects.get(id=ID)
     if request.method == "POST":
