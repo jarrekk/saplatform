@@ -176,6 +176,7 @@ def git_co(git_url, branch, key_path, local_path):
         # repo.pull()
     else:
         try:
+            os.system('mkdir -p %s' % local_path)
             os.system('GIT_SSH=%s' % key_path)
             os.system('git clone %s %s' % (git_url, local_path))
             # key_file = open(key_path)
