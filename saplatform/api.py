@@ -193,8 +193,10 @@ def svn_co(svn_url, local_path, versionnum, username, password):
     else:
         os.makedirs(local_path)
     if username and password:
+        # os.system('svn co %s %s --username %s --password %s' % (svn_url, local_path, username, password))
         r = svn.remote.RemoteClient(svn_url, username=username, password=password)
     else:
+        # os.system('svn co %s %s' % (svn_url, local_path))
         r = svn.remote.RemoteClient(svn_url)
     if str(versionnum):
         r.checkout(local_path)
@@ -206,7 +208,7 @@ def svn_co(svn_url, local_path, versionnum, username, password):
 
 def svn_version(local_path):
     s = svn.local.LocalClient(local_path)
-    version_num = s.info()['entry_revision']
+    version_num = s.info()['commit#revision']
     return version_num
 
 
