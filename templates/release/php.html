@@ -95,11 +95,11 @@
                     {% if perms.main.edit_test %}
                         <a href={% url 'edit_test' i.id %} class="btn btn-outline btn-xs btn-warning"><i class="fa fa-paste">编辑</i> </a>
                     {% endif %}
-                    {% if perms.main.edit_test %}
-                        {% ifequal i.repo_type 'git' %}
-                            <a href={% url 'refresh_branch' i.id %} class="btn btn-xs btn-outline btn-info"><i class="fa fa-refresh">刷新</i> </a>
-                        {% else %}{% endifequal %}
-                    {% endif %}
+{#                    {% if perms.main.edit_test %}#}
+{#                        {% ifequal i.repo_type 'git' %}#}
+{#                            <a href={% url 'refresh_branch' i.id %} class="btn btn-xs btn-outline btn-info"><i class="fa fa-refresh">刷新</i> </a>#}
+{#                        {% else %}{% endifequal %}#}
+{#                    {% endif %}#}
                     {% if perms.main.add_svncontrol %}
                         <a href={% url 'code_save' i.id %} class="ladda-button btn btn-outline btn-xs btn-success" data-style="zoom-in"><i class="fa fa-upload">上传</i> </a>
                     {% endif %}

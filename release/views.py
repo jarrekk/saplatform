@@ -121,8 +121,8 @@ def php(request):
     tests = Test.objects.all().filter(code_type='php')
     for i in tests:
         i.host_list = list(eval(i.host_list))
-        if i.branch:
-            i.branch = list(eval(i.branch))
+        # if i.branch:
+        #     i.branch = list(eval(i.branch))
     return render_to_response('release/php.html', locals(), RequestContext(request))
 
 
@@ -138,7 +138,10 @@ def java(request):
 
 @permission_required('test.view_test', login_url='perm_deny')
 def php_result(request, ID):
-    branch = request.GET["branch"]
+    try:
+        branch = request.GET["branch"]
+    except:
+        branch = ''
     test_release = Test.objects.all().get(id=str(ID))
     host_list, repo_type, repo_url, repo_last_branch, test_auth, server_path, stdout, before_cmd, after_cmd = \
         list(eval(test_release.host_list)), test_release.repo_type, test_release.repo_url.strip(), \
@@ -149,7 +152,7 @@ def php_result(request, ID):
     password = the_auth.password if the_auth.password else ''
     key = force_text(the_auth.key) if the_auth.key else ''
     local_path = os.path.join('/ops/test', server_path.lstrip('/'), str(ID))
-    repo_branch = branch if branch != repo_last_branch else ''
+    repo_branch = repo_last_branch if not branch else branch
     if repo_type == 'git':
         git_co(repo_url, repo_branch, key, local_path)
         if before_cmd:
@@ -158,7 +161,7 @@ def php_result(request, ID):
         for i in host_list:
             stdout = rrsync(local_path, i, server_path, ['.svn*', '.git*'])
             result = stdout.replace('\n', '</br>')
-        test_release.last_branch = branch
+        test_release.last_branch = repo_branch
         test_release.save()
     else:
         svn_co(repo_url, local_path, '', username, password)
@@ -206,17 +209,17 @@ def edit_test(request, ID):
     return render_to_response('release/edit_test.html', locals(), RequestContext(request))
 
 
-@permission_required('test.change_test', login_url='perm_deny')
-def refresh_branch(request, ID):
-    the_test = Test.objects.get(id=ID)
-    the_auth = Auth.objects.get(id=the_test.auth)
-    key = force_text(the_auth.key) if the_auth.key else ''
-    if the_test.repo_type == 'git':
-        local_path = os.path.join('/ops/test', the_test.server_path.lstrip('/'), str(the_test.id))
-        git_co(the_test.repo_url, '', key, local_path)
-        the_test.branch = str(git_branch(the_test.repo_url, key, local_path))
-        the_test.save()
-    return http_success(request, u'分支刷新成功')
+# @permission_required('test.change_test', login_url='perm_deny')
+# def refresh_branch(request, ID):
+#     the_test = Test.objects.get(id=ID)
+#     the_auth = Auth.objects.get(id=the_test.auth)
+#     key = force_text(the_auth.key) if the_auth.key else ''
+#     if the_test.repo_type == 'git':
+#         local_path = os.path.join('/ops/test', the_test.server_path.lstrip('/'), str(the_test.id))
+#         git_co(the_test.repo_url, '', key, local_path)
+#         the_test.branch = str(git_branch(the_test.repo_url, key, local_path))
+#         the_test.save()
+#     return http_success(request, u'分支刷新成功')
 
 
 @permission_required('test.add_svncontrol', login_url='perm_deny')

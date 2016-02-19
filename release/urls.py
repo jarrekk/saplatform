@@ -19,7 +19,7 @@ urlpatterns = patterns('',
                        url(r'^java_result/(?P<ID>\d+)/$', 'release.views.java_result', name='java_result'),
                        url(r'^add_test/$', 'release.views.add_test', name='add_test'),
                        url(r'^edit_test/(?P<ID>\d+)/$', 'release.views.edit_test', name='edit_test'),
-                       url(r'^refresh_branch/(?P<ID>\d+)/$', 'release.views.refresh_branch', name='refresh_branch'),
+                       # url(r'^refresh_branch/(?P<ID>\d+)/$', 'release.views.refresh_branch', name='refresh_branch'),
                        url(r'^code_save/(?P<ID>\d+)/$', 'release.views.code_save', name='code_save'),
                        url(r'^release_record/$', 'release.views.release_record', name='release_record'),
 

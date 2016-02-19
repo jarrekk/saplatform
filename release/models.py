@@ -13,7 +13,6 @@ class Test(models.Model):
     before_cmd = models.CharField(max_length=256, blank=True, null=True)
     after_cmd = models.CharField(max_length=256, blank=True, null=True)
     auth = models.IntegerField(blank=True, null=True)
-    branch = models.CharField(max_length=1024, null=True, blank=True)
     last_branch = models.CharField(max_length=64, null=True, blank=True)
     host_list = models.TextField(blank=True, null=True)
     server_path = models.CharField(max_length=256, blank=True, null=True)

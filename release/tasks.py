@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from release.models import Test
 from assets.models import Auth
 from django.utils.encoding import force_text
-from saplatform.api import git_co, git_branch
+from saplatform.api import git_co
 import svn.remote
 import svn.local
 import os

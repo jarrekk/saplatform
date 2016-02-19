@@ -14,7 +14,7 @@ import svn.remote
 import svn.local
 import paramiko
 import MySQLdb
-from gittle import Gittle, GittleAuth
+# from gittle import Gittle, GittleAuth
 
 requests.packages.urllib3.disable_warnings()
 
@@ -198,12 +198,12 @@ def git_co(git_url, branch, key_path, local_path):
             pass
 
 
-def git_branch(git_url, key_path, local_path):
-    key_file = open(key_path)
-    repo = Gittle(local_path, git_url)
-    repo.auth(username=None, password=None, pkey=key_file)
-    branch = repo.branches
-    return branch.keys()
+# def git_branch(git_url, key_path, local_path):
+#     key_file = open(key_path)
+#     repo = Gittle(local_path, git_url)
+#     repo.auth(username=None, password=None, pkey=key_file)
+#     branch = repo.branches
+#     return branch.keys()
 
 
 def svn_co(svn_url, local_path, versionnum, username, password):
