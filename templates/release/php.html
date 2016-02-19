@@ -79,11 +79,12 @@
                     <td>
                     {% if perms.main.view_test %}
                         <form method="get" action={% url 'php_result' i.id %} class="form-inline">
-                            <select class="select2_demo_1 form-control" name="branch">
-                                {% for j in i.branch %}
-                                    <option>{{ j }}</option>
-                                {% endfor %}
-                            </select>
+                            <input name="branch" class="form-control" placeholder="请输入分支">
+{#                            <select class="select2_demo_1 form-control" name="branch">#}
+{#                                {% for j in i.branch %}#}
+{#                                    <option>{{ j }}</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
                             <button type="submit" class="ladda-button btn btn-w-m btn-outline btn-success btn-sm" data-style="zoom-in"><i class="fa fa-send-o">发布</i> </button>
                         </form>
                     {% else %}

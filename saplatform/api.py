@@ -170,24 +170,29 @@ def admin_required():
 def git_co(git_url, branch, key_path, local_path):
     if os.path.exists(local_path):
         os.chdir(local_path)
+        os.system('GIT_SSH=%s' % key_path)
         os.system('git pull')
         ## repo.auth(username='jiak',password='jiak@zaijiadd.com')
         # repo.pull()
     else:
         try:
-            key_file = open(key_path)
-            auth = GittleAuth(pkey=key_file)
-            Gittle.clone(git_url, local_path, auth=auth, mode=0755)
+            os.system('GIT_SSH=%s' % key_path)
+            os.system('git clone %s %s' % (git_url, local_path))
+            # key_file = open(key_path)
+            # auth = GittleAuth(pkey=key_file)
+            # Gittle.clone(git_url, local_path, auth=auth, mode=0755)
         except:
             pass
     if branch == '':
         pass
     else:
         try:
-            key_file = open(key_path)
-            repo = Gittle(local_path, origin_uri=git_url)
-            repo.auth(pkey=key_file)
-            repo.switch_branch(branch)
+            os.chdir(local_path)
+            os.system('git checkout %s' % branch)
+            # key_file = open(key_path)
+            # repo = Gittle(local_path, origin_uri=git_url)
+            # repo.auth(pkey=key_file)
+            # repo.switch_branch(branch)
         except:
             pass
 
