@@ -34,11 +34,10 @@ def git_co_task(ID):
         the_auth = Auth.objects.get(id=the_test.auth)
         key = force_text(the_auth.key) if the_auth.key else ''
         git_co(the_test.repo_url, '', key, local_path)
-        the_test.branch = '["master"]'
-        # the_test.branch = str(git_branch(the_test.repo_url, key, local_path))
+        the_test.last_branch = 'master'
         the_test.save()
     else:
-        the_test.branch = '["master"]'
+        # the_test.last_branch = 'master'
         the_test.save()
 
 

@@ -14,7 +14,6 @@ import svn.remote
 import svn.local
 import paramiko
 import MySQLdb
-# from gittle import Gittle, GittleAuth
 
 requests.packages.urllib3.disable_warnings()
 
@@ -172,38 +171,19 @@ def git_co(git_url, branch, key_path, local_path):
         os.chdir(local_path)
         os.system('GIT_SSH=%s' % key_path)
         os.system('git pull')
-        ## repo.auth(username='jiak',password='jiak@zaijiadd.com')
-        # repo.pull()
     else:
         try:
             os.system('mkdir -p %s' % local_path)
             os.system('GIT_SSH=%s' % key_path)
             os.system('git clone %s %s' % (git_url, local_path))
-            # key_file = open(key_path)
-            # auth = GittleAuth(pkey=key_file)
-            # Gittle.clone(git_url, local_path, auth=auth, mode=0755)
         except:
             pass
-    if branch == '':
-        pass
-    else:
+    if branch:
         try:
             os.chdir(local_path)
             os.system('git checkout %s' % branch)
-            # key_file = open(key_path)
-            # repo = Gittle(local_path, origin_uri=git_url)
-            # repo.auth(pkey=key_file)
-            # repo.switch_branch(branch)
         except:
             pass
-
-
-# def git_branch(git_url, key_path, local_path):
-#     key_file = open(key_path)
-#     repo = Gittle(local_path, git_url)
-#     repo.auth(username=None, password=None, pkey=key_file)
-#     branch = repo.branches
-#     return branch.keys()
 
 
 def svn_co(svn_url, local_path, versionnum, username, password):

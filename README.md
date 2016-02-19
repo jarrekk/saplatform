@@ -59,7 +59,6 @@ dulwich==0.9.1
 funky==0.0.2
 futures==3.0.4
 gitdb==0.6.4
-gittle==0.5.0
 ipython==4.0.3
 ipython-genutils==0.1.0
 Jinja2==2.8
@@ -91,21 +90,6 @@ svn==0.3.36
 tornado==4.3
 traitlets==4.1.0
 uWSGI==2.0.12
-```
-
-#### gittle有点小问题，需要做如下额外配置：
-
-```
-pip uninstall dulwich
-```
-
-```
-pip install https://github.com/AaronO/dulwich/tarball/eebb032b2b7b982d21d636ac50b6e45de58b208b#egg=dulwich-0.9.1-2
-```
-
-```
-PY27LIB="/usr/local/lib/python2.7"
-curl -o $PY27LIB/dist-packages/dulwich/refs.py https://raw.githubusercontent.com/jelmer/dulwich/dulwich-0.9.7/dulwich/refs.py
 ```
 
 #### celery添加环境变量：
