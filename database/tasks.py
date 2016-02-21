@@ -5,7 +5,7 @@ from celery.utils.log import get_task_logger
 # from celery import shared_task
 from django.core.mail import send_mail
 from saplatform.api import mysql_cmd
-from saplatform.settings import EMAIL_HOST_USER
+# from saplatform.settings import EMAIL_HOST_USER
 from database.models import SQLResult
 
 logger = get_task_logger(__name__)

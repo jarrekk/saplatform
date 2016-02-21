@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from saplatform.api import *
+from django.http import HttpResponse
+from django.shortcuts import render_to_response, RequestContext
+
 from message.models import Alert
+from saplatform.api import request_user_id
 
 
 # Create your views here.

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from database.models import *
+from database.models import DbConfig
 from assets.models import Auth
 
 

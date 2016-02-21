@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 import datetime
+import os
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response, RequestContext
+from django.utils.encoding import force_text
 
-from release.forms import *
-from release.models import *
-from release.tasks import *
-from saplatform.api import *
+from assets.models import Auth
+from release.forms import TestForm, ProjectForm
+from release.models import Project, SvnControl, ReleaseRecord, Test
+from release.tasks import mail_task, git_co_task
+from saplatform.api import svn_co, svn_commit, svn_version, rrsync, lrsync, set_log, git_co, http_success
 from saplatform.settings import EMAIL_HOST_USER
-
 
 # Create your views here.
 
@@ -53,7 +58,7 @@ def edit_project(request, ID):
 @login_required()
 def svn(request):
     projects = SvnControl.objects.all().order_by('project').values_list('project', flat=True).distinct()
-    svns = SvnControl.objects.all().order_by('-no_version')
+    svns = SvnControl.objects.all().order_by('-no_version')[:25]
     return render_to_response('release/svn.html', locals(), RequestContext(request))
 
 

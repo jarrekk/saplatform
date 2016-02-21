@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from release.models import *
-from assets.models import *
-from django.core.validators import *
+from release.models import Test, Project
+from assets.models import Auth, Assets
+# from django.core.validators import *
 
 
 class TestForm(forms.ModelForm):

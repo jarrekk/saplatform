@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from users.models import UserPerm, GroupPerm
 from django.contrib.auth.models import User, Group
+
 from saplatform.api import en2cn, perm_filter
+from users.models import UserPerm, GroupPerm
 
 
 class LoginForm(forms.Form):

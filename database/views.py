@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth.decorators import login_required, permission_required
-from database.tasks import *
-from database.forms import *
-from database.models import DbConfig
-from saplatform.api import *
-from django.utils.encoding import force_text
-from django.http import HttpResponse
+import os
+
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response, RequestContext
+
+from assets.models import Auth
+from database.forms import DbConfigForm
+from database.models import DbConfig, SQLResult
+from database.tasks import mysql_cmd_task
+from saplatform.api import http_success, File
+from saplatform.settings import BASE_DIR, SQL_DIRS
 
 
+# from django.utils.encoding import force_text
 # Create your views here.
 
 def db_config(request):

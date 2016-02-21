@@ -88,7 +88,7 @@
                     {% endif %}
                     </td>
                     <td>
-                    {% if perms.release.edit_test %}
+                    {% if perms.release.change_test %}
                         <a href={% url 'edit_test' i.id %} class="btn btn-outline btn-xs btn-warning"><i class="fa fa-paste">编辑</i> </a>
                     {% endif %}
                     {% if perms.release.add_svncontrol %}

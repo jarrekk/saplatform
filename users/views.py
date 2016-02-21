@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
+import random
+import sys
+
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group, User
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response, RequestContext
 
-from users.forms import *
-from users.models import UserPerm, GroupPerm
-
-from saplatform.api import *
-from users.tasks import *
+from saplatform.api import http_success, admin_required, en2cn, alert
 from saplatform.settings import EMAIL_HOST_USER
-import sys
-import random
+from users.forms import UserPermForm, AddGroupFrom, AddUserFrom, LoginForm, ChangePasswordForm, ForgetPasswordForm, \
+    ProfileFrom, GroupPermForm
+from users.models import UserPerm, GroupPerm
+from users.tasks import mail_task
 
 reload(sys)
 sys.setdefaultencoding("utf-8")

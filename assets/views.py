@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth.decorators import login_required, permission_required
-from assets.forms import *
-from assets.models import *
-from saplatform.api import *
-from django.utils.encoding import force_text
-from saplatform.settings import BASE_DIR, SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD, SALT_MASTER
 import os
+
+from django.contrib.auth.decorators import login_required, permission_required
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response, RequestContext
+from django.utils.encoding import force_text
+
+from assets.forms import AssetsForm, AuthForm
+from assets.models import Auth, Assets
+from saplatform.api import sftp, ssh_cmd, SaltApi, sizeformat
+from saplatform.settings import BASE_DIR, SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD, SALT_MASTER
 
 
 # Create your views here.
