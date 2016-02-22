@@ -13,7 +13,7 @@ from assets.models import Auth
 from release.forms import TestForm, ProjectForm
 from release.models import Project, SvnControl, ReleaseRecord, Test
 from release.tasks import mail_task, git_co_task
-from saplatform.api import svn_co, svn_commit, svn_version, rrsync, lrsync, set_log, git_co, http_success
+from saplatform.api import svn_co, svn_commit, svn_version, rrsync, lrsync, set_log, git_co, http_success, paginator_fun
 from saplatform.settings import EMAIL_HOST_USER
 
 # Create your views here.
@@ -239,12 +239,5 @@ def code_save(request, ID):
 @login_required()
 def release_record(request):
     releases = ReleaseRecord.objects.all().order_by("-id")
-    paginator = Paginator(releases, 25)
-    page = request.GET.get('page')
-    try:
-        releases = paginator.page(page)
-    except PageNotAnInteger:
-        releases = paginator.page(1)
-    except EmptyPage:
-        releases = paginator.page(paginator.num_pages)
+    releases = paginator_fun(request, releases)
     return render_to_response('release/release_list.html', locals(), RequestContext(request))

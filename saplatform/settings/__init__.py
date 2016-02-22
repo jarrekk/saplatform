@@ -1,4 +1,5 @@
 import platform
+import cons
 
 if platform.node() == "94_54":
     from base import *

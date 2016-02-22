@@ -63,38 +63,66 @@
                                         {{ result.content }}
                                     </p>
                                     <h1>SQL执行结果</h1>
-                                        <table class="table table-hover">
+{#                                            <table class="table table-striped table-bordered table-hover dataTables-example" >#}
+{#                                            {% for unit in result.result %}#}
+{#                                            {% if unit.items %}#}
+{#                                            <p>#}
+{#                                            {% if forloop.first %}#}
+{#                                                <thead>#}
+{#                                            <tr>#}
+{#                                                {% for k,v in unit.items %}#}
+{#                                                        <th>{{ k }}</th>#}
+{#                                                {% endfor %}#}
+{#                                            </tr>#}
+{#                                            </thead>#}
+{#                                            <tbody>#}
+{#                                            <tr>#}
+{#                                                {% for k, v in unit.items%}#}
+{#                                                    <td>{{ v }}</td>#}
+{#                                                {% endfor %}#}
+{#                                                </tr>#}
+{#                                            </tbody>#}
+{#                                            </table>#}
+
+{#                                    <div class="table-responsive">#}
+                                        <table class="table table-striped table-bordered table-hover " id="editable" >
+{#                                        <table class="table table-hover">#}
                                         {% for unit in result.result %}
                                             {% if unit.items %}
-                                            <p>
-                                            {% if forloop.first %}
-                                                <thead>
+                                                {% if forloop.first %}
+                                                    <thead>
+                                                        <tr>
+                                                            {% for k,v in unit.items %}
+                                                                <th>{{ k }}</th>
+                                                            {% endfor %}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            {% for k, v in unit.items%}
+                                                                <td>{{ v }}</td>
+                                                            {% endfor %}
+                                                        </tr>
+                                                    </tbody>
+                                                {% else %}
+                                                    <tbody>
                                                     <tr>
-                                                        {% for k,v in unit.items %}
-                                                        <th>{{ k }}</th>
-                                                        {% endfor %}
+                                                    {% for k, v in unit.items%}
+                                                        <td>{{ v }}</td>
+                                                    {% endfor %}
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                {% for k, v in unit.items%}
-                                                    <td>{{ v }}</td>
-                                                {% endfor %}
-                                                </tr>
+                                                    </tbody>
+                                                {% endif %}
+{#                                                </tbody>#}
                                             {% else %}
-                                                <tr>
-                                                {% for k, v in unit.items%}
-                                                    <td>{{ v }}</td>
-                                                {% endfor %}
-                                                </tr>
-                                                </tbody>
+                                                <p>
+                                                    {{ unit }}
+                                                </p>
                                             {% endif %}
-                                            {% else %}
-                                                <p>{{ unit }}</p>
-                                            {% endif %}
-                                            </p>
+{#                                            </p>#}
                                             {% endfor %}
-                                        </table>
+                                                </table>
+{#                                    </div>#}
                                 </div>
                                 {% endfor %}
                             </div>
@@ -104,4 +132,54 @@
             </div>
         <div class="wrapper wrapper-content animated fadeIn">
 </div>
+{% endblock %}
+{% block footjs %}
+<script>
+        $(document).ready(function(){
+            $('.dataTables-example').DataTable({
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    { extend: 'copy'},
+                    {extend: 'csv'},
+                    {extend: 'excel', title: 'ExampleFile'},
+                    {extend: 'pdf', title: 'ExampleFile'},
+
+                    {extend: 'print',
+                     customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    }
+                    }
+                ]
+
+            });
+
+            /* Init DataTables */
+            var oTable = $('#editable').DataTable();
+
+            /* Apply the jEditable handlers to the table */
+            oTable.$('td').editable( '../example_ajax.php', {
+                "callback": function( sValue, y ) {
+                    var aPos = oTable.fnGetPosition( this );
+                    oTable.fnUpdate( sValue, aPos[0], aPos[1] );
+                },
+                "submitdata": function ( value, settings ) {
+                    return {
+                        "row_id": this.parentNode.getAttribute('id'),
+                        "column": oTable.fnGetPosition( this )[2]
+                    };
+                },
+
+                "width": "90%",
+                "height": "100%"
+            } );
+
+
+        });
+
+    </script>
 {% endblock %}

@@ -121,10 +121,6 @@ EMAIL_HOST = 'smtp.163.com'
 
 EMAIL_PORT = 25
 
-EMAIL_HOST_USER = '18916691387@163.com'
-
-EMAIL_HOST_PASSWORD = 'jack890614'
-
 EMAIL_USE_TLS = False
 
 EMAIL_TIMEOUT = 5
@@ -132,6 +128,3 @@ EMAIL_TIMEOUT = 5
 LOG_DIRS = os.path.join(BASE_DIR, 'logs')
 
 SQL_DIRS = os.path.join(BASE_DIR, 'static/sql')
-
-
-

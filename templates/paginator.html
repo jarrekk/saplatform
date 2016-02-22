@@ -1,0 +1,20 @@
+{% ifequal 1 releases.paginator.num_pages %}
+{% else %}
+    <div class="row">
+    <ul class="pagination pull-right">
+<li>
+    <a href="?page=1" class="btn btn-primary" role="button">首页</a>
+</li>
+{% if releases.has_previous %}
+    <li><a href="?page={{ releases.previous_page_number }}">上一页</a></li>
+{% endif %}
+
+{% if releases.has_next %}
+    <li><a href="?page={{ releases.next_page_number }}">下一页</a></li>
+{% endif %}
+<li>
+    <a href="?page={{ releases.paginator.num_pages }}" class="btn btn-primary" role="button">尾页</a>
+</li>
+    </ul>
+    </div>
+{% endifequal %}

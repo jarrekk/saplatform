@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response, RequestContext
-from django.http import HttpResponseRedirect
-from django.contrib.auth.models import Permission, ContentType, User
-from saplatform.settings import *
-from message.models import Alert
-import os
-import time
-import requests
-import subprocess
 import logging
-import svn.remote
-import svn.local
-import paramiko
+import os
+import subprocess
+import time
+
 import MySQLdb
+import paramiko
+import requests
+import svn.local
+import svn.remote
+from django.contrib.auth.models import Permission, ContentType, User
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response, RequestContext
+
+from message.models import Alert
+from saplatform.settings import LOG_DIRS
 
 requests.packages.urllib3.disable_warnings()
 
@@ -352,6 +355,17 @@ def alert(request, text):
     a = Alert(text=text, to_user_id=request_user_id(request))
     a.save()
 
+
+def paginator_fun(request, objects):
+    paginator = Paginator(objects, 25)
+    page = request.GET.get('page')
+    try:
+        objects = paginator.page(page)
+    except PageNotAnInteger:
+        objects = paginator.page(1)
+    except EmptyPage:
+        objects = paginator.page(paginator.num_pages)
+    return objects
 
 # def message(title, text, msg_type, to_user_id, from_user_id, status=0):
 #     m = Message(title=title, text=text, msg_type=msg_type, to_user_id=to_user_id, from_user_id=from_user_id,
