@@ -1,5 +1,5 @@
 import platform
-import cons
+import sys_constant
 
 if platform.node() == "94_54":
     from base import *
