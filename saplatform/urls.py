@@ -9,7 +9,7 @@ urlpatterns = patterns('saplatform.views',
 
                        url(r'^$', 'index', name='index'),
                        url(r'^skin_config/$', 'skin_config', name='skin_config'),
-                       # url(r'^404$', 'fourofour', name='fourofour'),
+
                        url(r'^perm_deny$', 'perm_deny', name='perm_deny'),
 
                        # release model
