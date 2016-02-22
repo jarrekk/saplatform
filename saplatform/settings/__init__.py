@@ -1,5 +1,5 @@
 import platform
-import sys_constant
+import app_constant
 
 if platform.node() == "94_54":
     from base import *
