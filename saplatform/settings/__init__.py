@@ -1,6 +1,6 @@
 import platform
 try:
-    import app_constant
+    from app_constant import *
 except:
     pass
 
