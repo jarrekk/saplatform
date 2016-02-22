@@ -1,5 +1,8 @@
 import platform
-import app_constant
+try:
+    import app_constant
+except:
+    pass
 
 if platform.node() == "94_54":
     from base import *
