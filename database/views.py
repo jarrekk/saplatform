@@ -8,8 +8,8 @@ from django.shortcuts import render_to_response, RequestContext
 from assets.models import Auth
 from database.forms import DbConfigForm
 from database.models import DbConfig, SQLResult
-from database.tasks import mysql_cmd_task
-from saplatform.api import http_success, File
+from database.tasks import mysql_cmd_task, script_mysql_task
+from saplatform.api import http_success, File, local_cmd
 from saplatform.settings import BASE_DIR, SQL_DIRS
 
 
@@ -60,16 +60,25 @@ def sqls(request):
 def exec_sql(request):
     file_name = request.GET["file_name"]
     ID = request.GET["db_config"]
-    f = open(os.path.join(SQL_DIRS, file_name))
-    sql = f.read()
+    exec_method = request.GET["exec_method"]
     the_db_config = DbConfig.objects.get(id=ID)
     the_auth = Auth.objects.get(id=the_db_config.auth)
-    mysql_cmd_task.delay(the_db_config.address,
-                         the_auth.username,
-                         the_auth.password,
-                         sql,
-                         request.user.username,
-                         file_name)
+    f = open(os.path.join(SQL_DIRS, file_name))
+    sql = f.read()
+    if exec_method:
+        script_mysql_task.delay(the_db_config.address,
+                                the_auth.username,
+                                the_auth.password,
+                                sql,
+                                file_name,
+                                request.user.username)
+    else:
+        mysql_cmd_task.delay(the_db_config.address,
+                             the_auth.username,
+                             the_auth.password,
+                             sql,
+                             request.user.username,
+                             file_name)
     return http_success(request, u'操作成功,请等待执行结果,在SQL执行结果查看.')
 
 

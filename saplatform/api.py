@@ -271,6 +271,37 @@ def sizeformat(size, unit='B', Standard=1000):
                 raise Exception("Out of the maximum conversion range (%s^14 %s)" % (Standard, unit))
 
 
+def sftp(ip, port, username, password, key_path, local_file, remote_file):
+    t = paramiko.Transport((ip, int(port)))
+    if password:
+        t.connect(username=username, password=password)
+    else:
+        key = paramiko.RSAKey.from_private_key_file(key_path)
+        t.connect(username=username, pkey=key)
+    ssh_ftp = paramiko.SFTPClient.from_transport(t)
+    ssh_ftp.put(local_file, remote_file)
+    t.close()
+
+
+def local_cmd(cmd):
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    stdout, stderr = p.communicate()
+    return stdout
+
+def ssh_cmd(ip, port, username, password, key_path, cmd):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    if password:
+        ssh.connect(ip, port=port, username=username, password=password)
+    else:
+        key = paramiko.RSAKey.from_private_key_file(key_path)
+        ssh.connect(ip, port=port, username=username, pkey=key)
+    stdin, stdout, stderr = ssh.exec_command(cmd)
+    stdout = stdout.readlines() if stdout.readlines() else ''
+    ssh.close()
+    return stdout
+
+
 def rrsync(local_path, remote_ip, remote_path, exlist):
     if os.path.isdir(local_path):
         local_path = os.path.abspath(local_path) + '/'
@@ -298,32 +329,6 @@ def lrsync(merge_path, local_path, exlist):
     cmd = 'rsync -avz %s %s %s' % (ex_string, merge_path, local_path)
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout, stderr = p.communicate()
-    return stdout
-
-
-def sftp(ip, port, username, password, key_path, local_file, remote_file):
-    t = paramiko.Transport((ip, int(port)))
-    if password:
-        t.connect(username=username, password=password)
-    else:
-        key = paramiko.RSAKey.from_private_key_file(key_path)
-        t.connect(username=username, pkey=key)
-    ssh_ftp = paramiko.SFTPClient.from_transport(t)
-    ssh_ftp.put(local_file, remote_file)
-    t.close()
-
-
-def ssh_cmd(ip, port, username, password, key_path, cmd):
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    if password:
-        ssh.connect(ip, port=port, username=username, password=password)
-    else:
-        key = paramiko.RSAKey.from_private_key_file(key_path)
-        ssh.connect(ip, port=port, username=username, pkey=key)
-    stdin, stdout, stderr = ssh.exec_command(cmd)
-    stdout = stdout.readlines() if stdout.readlines() else ''
-    ssh.close()
     return stdout
 
 

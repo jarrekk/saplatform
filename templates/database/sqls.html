@@ -54,6 +54,10 @@
                                         <div class="tooltip-demo">
                                             <form method="get" action={% url 'exec_sql' %} class="form-inline">
                                                 <input type="text" name="file_name" value="{{ sql.name }}" style="visibility:hidden" />
+                                                <select class="select2_demo_1 form-control" name="exec_method">
+                                                    <option value="1">直接执行</option>
+                                                    <option value="0">脚本执行</option>
+                                                </select>
                                                 <select class="select2_demo_1 form-control" name="db_config">
                                                 {% for i in db_configs %}
                                                     <option value="{{ i.id }}">{{ i.name }}</option>
