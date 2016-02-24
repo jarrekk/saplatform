@@ -3,7 +3,6 @@ import datetime
 import os
 
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, RequestContext
