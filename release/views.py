@@ -125,8 +125,6 @@ def php(request):
     tests = Test.objects.all().filter(code_type='php')
     for i in tests:
         i.host_list = list(eval(i.host_list))
-        # if i.branch:
-        #     i.branch = list(eval(i.branch))
     return render_to_response('release/php.html', locals(), RequestContext(request))
 
 
