@@ -103,3 +103,24 @@ def sql_result(request):
     for i in sql_results:
         i.result = eval(i.result)
     return render_to_response('database/sql_result.html', locals(), RequestContext(request))
+
+
+def sql_input(request):
+    db_configs = DbConfig.objects.all()
+    # if request.method == "GET":
+    #     pass
+    try:
+        sql = request.GET["context"]
+        ID = request.GET["db_config"]
+        the_db_config = DbConfig.objects.get(id=ID)
+        the_auth = Auth.objects.get(id=the_db_config.auth)
+        # print sql
+        mysql_cmd_task.delay(the_db_config.address,
+                             the_auth.username,
+                             the_auth.password,
+                             sql,
+                             request.user.username,
+                             u'SQL语句执行')
+        return http_success(request, u'操作成功,请等待执行结果,在SQL执行结果查看.')
+    except:
+        return render_to_response('database/sql_input.html', locals(), RequestContext(request))

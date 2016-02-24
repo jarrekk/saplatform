@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Autoops | SQL执行记录{% endblock %}
+{% block breadcrumb %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>SQL执行记录</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href={% url 'index' %}>首页</a>
+            </li>
+            <li>
+            <a>数据库管理</a>
+            </li>
+            <li class="active">
+            <strong>SQL执行记录</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock %}
+{% block col3 %}
+<li>
+    <a href="#"><i class="fa fa-database"></i> <span class="nav-label">数据库管理</span> <span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse in">
+{% endblock %}
+{% block body %}
+    <body class="fixed-sidebar no-skin-config full-height-layout">
+{% endblock %}
+{% block content %}
+    <form method="get" action={% url 'sql_input' %}>
+    <div class="input-group m-b"><textarea type="text" class="form-control" rows="2" name="context"></textarea> <span class="input-group-addon">limit 100;</span></div>
+        <div class="col-md-6">
+        <select class="select2_demo_1 form-control col-md-4" name="db_config">
+        {% for i in db_configs %}
+            <option value="{{ i.id }}">{{ i.name }}</option>
+        {% endfor %}
+        </select>
+        </div>
+    <div class="col-md-6">
+        <button class="btn btn-outline btn-w-m btn-primary btn-sm">执行 </button>
+    </div>
+</form>
+{% endblock %}
+{% block footjs %}
+{% endblock %}

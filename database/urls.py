@@ -9,5 +9,6 @@ urlpatterns = patterns('',
                        url(r'^exec_sql/', 'database.views.exec_sql', name='exec_sql'),
                        url(r'^upload/$', 'database.views.upload', name='upload'),
                        url(r'^sql_result/$', 'database.views.sql_result', name='sql_result'),
+                       url(r'^sql_input/$', 'database.views.sql_input', name='sql_input'),
 
                        )
