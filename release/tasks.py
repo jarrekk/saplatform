@@ -6,10 +6,10 @@ from celery.utils.log import get_task_logger
 
 # from celery import shared_task
 from django.core.mail import send_mail
-from release.models import Test
+from release.models import Test, Project
 from assets.models import Auth
 from django.utils.encoding import force_text
-from saplatform.api import git_co
+from saplatform.api import git_co, git_hash
 import svn.remote
 import svn.local
 import os
@@ -29,16 +29,14 @@ def git_co_task(ID):
         the_test = Test.objects.get(id=ID)
     else:
         the_test = Test.objects.order_by('-id')[0]
-    if the_test.repo_type == 'git':
-        local_path = os.path.join('/ops/test', the_test.server_path.lstrip('/'), str(the_test.id))
-        the_auth = Auth.objects.get(id=the_test.auth)
-        key = force_text(the_auth.key) if the_auth.key else ''
-        git_co(the_test.repo_url, '', key, local_path)
-        the_test.last_branch = 'master'
-        the_test.save()
-    else:
-        # the_test.last_branch = 'master'
-        the_test.save()
+    the_project = Project.objects.get(name=the_test.project)
+    the_auth = Auth.objects.get(id=the_project.auth)
+    local_path = os.path.join('/ops/%s' % the_test.project, the_test.server_path.lstrip('/'), str(the_test.id))
+    key = force_text(the_auth.key) if the_auth.key else ''
+    git_co(the_test.repo_url, '', key, local_path)
+    the_test.last_branch = 'master'
+    the_test.last_hash = git_hash(local_path)
+    the_test.save()
 
 
 @task

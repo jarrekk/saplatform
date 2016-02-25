@@ -9,14 +9,14 @@ class TestForm(forms.ModelForm):
     project = forms.ChoiceField(label=u'项目名', required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     host_list = forms.MultipleChoiceField(label=u'服务器组', required=True,
                                           widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
-    auth = forms.ChoiceField(label=u'登陆认证', required=True, widget=forms.Select(attrs={'class': 'form-control'}))
+    # auth = forms.ChoiceField(label=u'登陆认证', required=True, widget=forms.Select(attrs={'class': 'form-control'}))
     name = forms.CharField(label=u'测试例', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     before_cmd = forms.CharField(label=u'发布前命令', required=False,
                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
     after_cmd = forms.CharField(label=u'发布后命令', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    code_type = forms.ChoiceField(label=u'代码语言', required=True, widget=forms.RadioSelect())
-    repo_type = forms.ChoiceField(label=u'仓库类型', required=True, widget=forms.RadioSelect())
-    repo_url = forms.CharField(label=u'仓库地址', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    # code_type = forms.ChoiceField(label=u'代码语言', required=True, widget=forms.RadioSelect())
+    # repo_type = forms.ChoiceField(label=u'仓库类型', required=True, widget=forms.RadioSelect())
+    # repo_url = forms.CharField(label=u'仓库地址', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     server_path = forms.CharField(label=u'远程服务器路径', required=True,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     desc = forms.CharField(label=u'描述', required=False,
@@ -24,17 +24,15 @@ class TestForm(forms.ModelForm):
 
     class Meta:
         model = Test
-        fields = (
-            'name', 'project', 'code_type', 'repo_type', 'repo_url', 'before_cmd', 'after_cmd', 'auth', 'host_list',
-            'server_path', 'desc')
+        fields = ('name', 'project', 'before_cmd', 'after_cmd', 'host_list', 'server_path', 'desc')
 
     def __init__(self, *args, **kwargs):
         super(TestForm, self).__init__(*args, **kwargs)
         self.fields['host_list'].choices = ((x.lan_ip, x.lan_ip) for x in Assets.objects.all())
         self.fields['project'].choices = ((x.name, x.name) for x in Project.objects.all())
-        self.fields['auth'].choices = ((x.id, x.name) for x in Auth.objects.all())
-        self.fields['code_type'].choices = ((x, x) for x in ['php', 'java', 'nodejs'])
-        self.fields['repo_type'].choices = ((x, x) for x in ['git', 'svn'])
+        # self.fields['auth'].choices = ((x.id, x.name) for x in Auth.objects.all())
+        # self.fields['code_type'].choices = ((x, x) for x in ['php', 'java', 'nodejs'])
+        # self.fields['repo_type'].choices = ((x, x) for x in ['git', 'svn'])
 
 
 class ProjectForm(forms.ModelForm):

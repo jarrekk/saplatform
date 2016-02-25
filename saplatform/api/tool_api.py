@@ -40,6 +40,7 @@ class SaltApi:
             data1['tgt'] = '*'
         data1['fun'] = 'cmd.run'
         data1['arg'] = cmd
+        data1['expr_form'] = 'list'
         r = requests.post(self.__url, data=data1, headers=head1, verify=False)
         return r.content.replace('true', 'True').replace('false', 'False')
 
@@ -54,6 +55,7 @@ class SaltApi:
         else:
             data1['tgt'] = '*'
         data1['fun'] = fun
+        data1['expr_form'] = 'list'
         r = requests.post(self.__url, data=data1, headers=head1, verify=False)
         return r.content.replace('true', 'True').replace('false', 'False')
 

@@ -37,32 +37,32 @@
         <label class="col-md-2 control-label">项目名称</label>
         <div class="col-md-4">{{ form.project }}{{ form.project.errors }}</div>
     </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label">代码类型</label>
-        <div class="col-md-8">
-            {% for i in form.code_type %}
-            <div class="i-checks checkbox-inline"><label> <input type="radio" name={{ form.code_type.name }} value={{ i.choice_value }}> <i></i> {{ i.choice_label }} </label></div>
-            {% endfor %}
-        {{ form.code_type.errors }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label">仓库类型</label>
-        <div class="col-md-8">
-            {% for i in form.repo_type %}
-            <div class="i-checks checkbox-inline"><label> <input type="radio" name={{ form.repo_type.name }} value={{ i.choice_value }}> <i></i> {{ i.choice_label }} </label></div>
-            {% endfor %}
-        {{ form.repo_type.errors }}
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label">仓库地址</label>
-        <div class="col-md-4">{{ form.repo_url }}{{ form.repo_url.errors }}</div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label">认证类型</label>
-        <div class="col-md-4">{{ form.auth }}{{ form.auth.errors }}</div>
-    </div>
+{#    <div class="form-group">#}
+{#        <label class="col-md-2 control-label">代码类型</label>#}
+{#        <div class="col-md-8">#}
+{#            {% for i in form.code_type %}#}
+{#            <div class="i-checks checkbox-inline"><label> <input type="radio" name={{ form.code_type.name }} value={{ i.choice_value }}> <i></i> {{ i.choice_label }} </label></div>#}
+{#            {% endfor %}#}
+{#        {{ form.code_type.errors }}#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#        <label class="col-md-2 control-label">仓库类型</label>#}
+{#        <div class="col-md-8">#}
+{#            {% for i in form.repo_type %}#}
+{#            <div class="i-checks checkbox-inline"><label> <input type="radio" name={{ form.repo_type.name }} value={{ i.choice_value }}> <i></i> {{ i.choice_label }} </label></div>#}
+{#            {% endfor %}#}
+{#        {{ form.repo_type.errors }}#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#        <label class="col-md-2 control-label">仓库地址</label>#}
+{#        <div class="col-md-4">{{ form.repo_url }}{{ form.repo_url.errors }}</div>#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#        <label class="col-md-2 control-label">认证类型</label>#}
+{#        <div class="col-md-4">{{ form.auth }}{{ form.auth.errors }}</div>#}
+{#    </div>#}
     <div class="form-group">
         <label class="col-md-2 control-label">测试服务器</label>
         <div class="col-md-3">{{ form.host_list }}{{ form.host_list.errors }}</div>

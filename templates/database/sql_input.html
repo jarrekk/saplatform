@@ -29,7 +29,11 @@
 {% endblock %}
 {% block content %}
     <form method="get" action={% url 'sql_input' %}>
-    <div class="input-group m-b"><textarea type="text" class="form-control" rows="2" name="context"></textarea> <span class="input-group-addon">limit 100;</span></div>
+    <div class="input-group m-b">
+        <span class="input-group-addon">select</span>
+        <textarea type="text" class="form-control" rows="2" name="context"></textarea>
+        <span class="input-group-addon">limit 100;</span>
+    </div>
         <div class="col-md-6">
         <select class="select2_demo_1 form-control col-md-4" name="db_config">
         {% for i in db_configs %}

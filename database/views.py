@@ -9,7 +9,7 @@ from assets.models import Auth
 from database.forms import DbConfigForm
 from database.models import DbConfig, SQLResult
 from database.tasks import mysql_cmd_task, script_mysql_task
-from saplatform.api import http_success, File, local_cmd
+from saplatform.api import http_success, File, local_cmd, mysql_cmd
 from saplatform.settings import BASE_DIR, SQL_DIRS
 
 
@@ -114,13 +114,19 @@ def sql_input(request):
         ID = request.GET["db_config"]
         the_db_config = DbConfig.objects.get(id=ID)
         the_auth = Auth.objects.get(id=the_db_config.auth)
+        sql = "%s %s %s" % ("select", sql, "limit 100;")
         # print sql
-        mysql_cmd_task.delay(the_db_config.address,
-                             the_auth.username,
-                             the_auth.password,
-                             sql,
-                             request.user.username,
-                             u'SQL语句执行')
+        # mysql_cmd_task.delay(the_db_config.address,
+        #                      the_auth.username,
+        #                      the_auth.password,
+        #                      sql,
+        #                      request.user.username,
+        #                      u'SQL语句执行')
+        result = mysql_cmd(the_db_config.address, the_auth.username, the_auth.password, sql)
+        if not result:
+            result = ({'result': 'success'},)
+        r = SQLResult(content=sql, result=str(result), user=request.user.username, sql_name=u'SQL语句')
+        r.save()
         return http_success(request, u'操作成功,请等待执行结果,在SQL执行结果查看.')
     except:
         return render_to_response('database/sql_input.html', locals(), RequestContext(request))
