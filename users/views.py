@@ -12,11 +12,12 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, RequestContext
 
 from saplatform.api import http_success, admin_required, en2cn, alert
-from saplatform.settings import EMAIL_HOST_USER
+from saplatform.settings import EMAIL_HOST_USER, LOCAL_URL
 from users.forms import UserPermForm, AddGroupFrom, AddUserFrom, LoginForm, ChangePasswordForm, ForgetPasswordForm, \
     ProfileFrom, GroupPermForm
 from users.models import UserPerm, GroupPerm
 from users.tasks import mail_task
+# from celery.task.http import URL
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -116,7 +117,12 @@ def forget_password(request):
                     ' ', '')
             the_user.set_password(new_password)
             the_user.save()
-
+            # res = URL('%s/tasks/mail' % LOCAL_URL).get_async(subject='test',
+            #                                            message='success',
+            #                                            from_email=EMAIL_HOST_USER,
+            #                                            recipient_list='[the_user.email]',
+            #                                            fail_silently=False)
+            #
             mail_task.delay(subject=u'用户 %s 密码找回' % the_user.username,
                             message=u'Hi %s:你的新密码为: %s ,请重新登录.' % (the_user.username, new_password),
                             from_email=EMAIL_HOST_USER, recipient_list=[the_user.email], fail_silently=False)

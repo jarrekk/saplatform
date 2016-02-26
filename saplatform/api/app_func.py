@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 from message.models import Alert
+from req import request_user_id
 from saplatform.settings import LOG_DIRS
 
 
