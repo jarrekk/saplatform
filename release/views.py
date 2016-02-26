@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import datetime
 import os
 
 from django.contrib.auth.decorators import login_required, permission_required
@@ -10,9 +9,9 @@ from django.utils.encoding import force_text
 
 from assets.models import Auth
 from release.forms import TestForm, ProjectForm
-from release.models import Project, SvnControl, ReleaseRecord, Test, PreRecord, RollBack
+from release.models import Project, ReleaseRecord, Test, PreRecord, RollBack
 from release.tasks import mail_task, git_co_task
-from saplatform.api import rrsync, lrsync, set_log, git_co, http_success, http_error, paginator_fun, SaltApi
+from saplatform.api import rrsync, set_log, git_co, http_success, http_error, paginator_fun, SaltApi
 from saplatform.settings import EMAIL_HOST_USER, SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD
 
 
@@ -57,88 +56,23 @@ def edit_project(request, ID):
 
 @login_required()
 def pre_record(request):
-    projects = SvnControl.objects.all().order_by('project').values_list('project', flat=True).distinct()
-    pre_records = PreRecord.objects.all().order_by('-no_version')
+    projects = Project.objects.all().order_by('name').values_list('name', flat=True).distinct()
+    pre_records = PreRecord.objects.all()
     return render_to_response('release/pre_record.html', locals(), RequestContext(request))
 
 
-# @permission_required('release.view_test', login_url='perm_deny')
-# def svn_pre_result(request, ID):
-#     the_svn = SvnControl.objects.get(id=str(ID))
-#     the_project = Project.objects.get(name=the_svn.project)
-#     the_auth = Auth.objects.get(id=the_project.auth)
-#     username = the_auth.username if the_auth.username else ''
-#     password = the_auth.password if the_auth.password else ''
-#     pre_host_list = list(eval(the_project.pre_host_list))
-#     pre_url = the_project.url.strip()
-#     pre_no_version = the_svn.no_version
-#     pre_server_path = os.path.abspath(the_project.server_path)
-#     pre_local_path = os.path.join('/ops/pre', pre_server_path.lstrip('/'), str(ID))
-#     # svn_co(pre_url, pre_local_path, pre_no_version, username, password)
-#     for i in pre_host_list:
-#         stdout = rrsync(pre_local_path, i, pre_server_path, ['.svn*', '.git*'])
-#     pre = ReleaseRecord(project=the_project.name, environment=u'预发布', no_version=pre_no_version,
-#                         release_user=request.user)
-#     pre.save()
-#     loger = set_log(level='debug', filename='pre_product_release_%s.log' % datetime.date.today().strftime('%Y-%m-%d'))
-#     loger.debug('pre_product released by %s, detail : %s' % (request.user, stdout))
-#     result = stdout.replace('\n', '</br>')
-#     if request.user.email:
-#         mail_task.delay(subject=u'项目 %s 预发布发布结果 版本号:%s' % (the_project.name, pre_no_version),
-#                         message=stdout,
-#                         from_email=EMAIL_HOST_USER,
-#                         recipient_list=[request.user.email],
-#                         fail_silently=False)
-#     return render_to_response('release/svn_pre_result.html', locals(), RequestContext(request))
-#
-#
-# @permission_required('release.view_test', login_url='perm_deny')
-# @permission_required('release.view_project', login_url='perm_deny')
-# def svn_pro_result(request, ID):
-#     the_svn = SvnControl.objects.get(id=str(ID))
-#     the_project = Project.objects.get(name=the_svn.project)
-#     the_auth = Auth.objects.get(id=the_project.auth)
-#     username = the_auth.username if the_auth.username else ''
-#     password = the_auth.password if the_auth.password else ''
-#     pro_host_list = list(eval(the_project.pro_host_list))
-#     pro_url = the_project.url.strip()
-#     pro_no_version = the_svn.no_version
-#     pro_server_path = os.path.abspath(the_project.server_path)
-#     pro_local_path = os.path.join('/ops/pro', pro_server_path.lstrip('/'), str(ID))
-#     # svn_co(pro_url, pro_local_path, pro_no_version, username, password)
-#     for i in pro_host_list:
-#         stdout = rrsync(pro_local_path, i, pro_server_path, ['.svn*', '.git*'])
-#     pro = ReleaseRecord(project=the_project.name, environment=u'正式', no_version=pro_no_version,
-#                         release_user=request.user)
-#     pro.save()
-#     loger = set_log(level='debug', filename='product_release_%s.log' % datetime.date.today().strftime('%Y-%m-%d'))
-#     loger.debug('product released by %s, detail : %s' % (request.user, stdout))
-#     result = stdout.replace('\n', '</br>')
-#     if request.user.email:
-#         mail_task.delay(subject=u'项目 %s 正式发布结果 版本号:%s' % (the_project.name, pro_no_version),
-#                         message=stdout,
-#                         from_email=EMAIL_HOST_USER,
-#                         recipient_list=[request.user.email],
-#                         fail_silently=False)
-#     return render_to_response('release/svn_pro_result.html', locals(), RequestContext(request))
+@login_required()
+def del_pre_record(request, ID):
+    PreRecord.objects.get(id=ID).delete()
+    return render_to_response('release/pre_record.html', locals(), RequestContext(request))
 
 
 @login_required()
-def php(request):
+def test(request):
     tests = Test.objects.all()
     for i in tests:
         i.host_list = list(eval(i.host_list))
     return render_to_response('release/test.html', locals(), RequestContext(request))
-
-
-@login_required()
-def nodejs(request):
-    return render_to_response('release/nodejs.html', RequestContext(request))
-
-
-@login_required()
-def java(request):
-    return render_to_response('release/java.html', RequestContext(request))
 
 
 @permission_required('release.view_test', login_url='perm_deny')
@@ -172,16 +106,17 @@ def test_release(request, ID):
 
 @permission_required('release.view_test', login_url='perm_deny')
 def pre_release(request, ID):
-    if PreRecord.objects.all():
+    the_release = Test.objects.all().get(id=str(ID))
+    if PreRecord.objects.all().filter(project=the_release.project):
         return http_error(request, u'有项目分支正在预发布!')
     else:
-        the_release = Test.objects.all().get(id=str(ID))
         the_project = Project.objects.get(name=the_release.project)
         pre_host_list = list(eval(the_project.pre_host_list))
-        server_path = os.path.abspath(the_release.server_path)
-        local_path = os.path.join('/ops/%s' % the_project.name, server_path.lstrip('/'), str(ID))
+        test_server_path = os.path.abspath(the_release.server_path)
+        pre_server_path = os.path.abspath(the_project.server_path)
+        local_path = os.path.join('/ops/%s' % the_project.name, test_server_path.lstrip('/'), str(ID))
         for i in pre_host_list:
-            stdout = rrsync(local_path, i, server_path, ['.git*'])
+            stdout = rrsync(local_path, i, pre_server_path, ['.git*'])
             result = stdout.replace('\n', '</br>')
         i_pre_release = PreRecord(project=the_project.name,
                                   branch=the_release.last_branch,
@@ -198,20 +133,25 @@ def pro_release(request, ID):
         the_release = Test.objects.all().get(id=the_pre_record.test_id)
         the_project = Project.objects.get(name=the_release.project)
         pro_host_list = list(eval(the_project.pro_host_list))
-        ln_path = os.path.abspath(the_release.server_path)
-        server_path = os.path.abspath(the_release.server_path)+"_%s" % the_release.last_hash
-        local_path = os.path.join('/ops/%s' % the_project.name, server_path.lstrip('/'), str(ID))
+        ln_path = os.path.abspath(the_project.server_path)
+        test_server_path = os.path.abspath(the_release.server_path)
+        pro_server_path = os.path.abspath(the_project.server_path)+"_%s" % the_release.last_hash
+        local_path = os.path.join('/ops/%s' % the_project.name, test_server_path.lstrip('/'), str(ID))
         host_list_str = ','.join(pro_host_list)
         salt = SaltApi(SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD)
         salt.login()
         for i in pro_host_list:
-            stdout = rrsync(local_path, i, server_path, ['.git*'])
+            stdout = rrsync(local_path, i, pro_server_path, ['.git*'])
             result = stdout.replace('\n', '</br>')
-        salt.cmd(host_list_str, 'ln -s %s %s' % (server_path, ln_path))
+        salt.cmd(host_list_str, 'ln -s %s %s' % (pro_server_path, ln_path))
         salt.logout()
+        the_rollback = RollBack.objects.get(in_use=True)
+        the_rollback.in_use = False
+        the_rollback.save()
         i_roll_back = RollBack(project=the_project.name,
                                branch=the_release.last_branch,
-                               hash=the_release.last_hash)
+                               hash=the_release.last_hash,
+                               in_use=True)
         i_roll_back.save()
         pro = ReleaseRecord(project=the_project.name,
                             branch=the_release.last_branch,
@@ -224,13 +164,56 @@ def pro_release(request, ID):
 
 
 @login_required()
-def nodejs_result(request):
-    return render_to_response('release/nodejs.html', RequestContext(request))
+def rollback(request):
+    rollbacks = RollBack.objects.all()
+    projects = Project.objects.all().order_by('name').values_list('name', flat=True).distinct()
+    return render_to_response('release/rollback.html', locals(), RequestContext(request))
 
 
 @login_required()
-def java_result(request):
-    return render_to_response('release/nodejs.html', RequestContext(request))
+def del_rollback(request, ID):
+    the_rollback = RollBack.objects.get(id=ID)
+    if the_rollback.in_use:
+        http_error(request, u'不能删除正在使用的版本')
+    else:
+        the_project = Project.objects.get(name=the_rollback.project)
+        pro_server_path = os.path.abspath(the_project.server_path)+"_%s" % the_rollback.hash
+        pro_host_list = list(eval(the_project.pro_host_list))
+        host_list_str = ','.join(pro_host_list)
+        salt = SaltApi(SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD)
+        salt.login()
+        salt.cmd(host_list_str, 'rm -rf %s' % pro_server_path)
+        salt.logout()
+        the_rollback.delete()
+        return http_success(request, u'版本删除成功')
+
+
+@login_required()
+def exec_rollback(request, ID):
+    the_rollback = RollBack.objects.get(id=ID)
+    if the_rollback.in_use:
+        http_error(request, u'正式环境为此版本')
+    else:
+        old_rollback = RollBack.objects.get(in_use=True)
+        old_rollback.in_use = False
+        old_rollback.save()
+        the_project = Project.objects.get(name=the_rollback.project)
+        ln_path = os.path.abspath(the_project.server_path)
+        pro_server_path = os.path.abspath(the_project.server_path)+"_%s" % the_rollback.hash
+        pro_host_list = list(eval(the_project.pro_host_list))
+        host_list_str = ','.join(pro_host_list)
+        salt = SaltApi(SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD)
+        salt.login()
+        salt.cmd(host_list_str, 'ln -s %s %s' % (pro_server_path, ln_path))
+        salt.logout()
+        the_rollback.in_use = True
+        the_rollback.save()
+        pro = ReleaseRecord(project=the_project.name,
+                            branch=the_rollback.branch,
+                            hash=the_rollback.hash,
+                            release_user=request.user)
+        pro.save()
+        return http_success(request, u'版本回退成功')
 
 
 @permission_required('release.add_test', login_url='perm_deny')
@@ -263,6 +246,6 @@ def edit_test(request, ID):
 
 @login_required()
 def release_record(request):
-    releases = ReleaseRecord.objects.all().order_by("-id")
+    releases = ReleaseRecord.objects.all().order_by("-id")[:100]
     releases = paginator_fun(request, releases)
     return render_to_response('release/release_list.html', locals(), RequestContext(request))

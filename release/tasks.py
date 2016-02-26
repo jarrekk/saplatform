@@ -33,7 +33,7 @@ def git_co_task(ID):
     the_auth = Auth.objects.get(id=the_project.auth)
     local_path = os.path.join('/ops/%s' % the_test.project, the_test.server_path.lstrip('/'), str(the_test.id))
     key = force_text(the_auth.key) if the_auth.key else ''
-    git_co(the_test.repo_url, '', key, local_path)
+    git_co(the_project.url, '', key, local_path)
     the_test.last_branch = 'master'
     the_test.last_hash = git_hash(local_path)
     the_test.save()

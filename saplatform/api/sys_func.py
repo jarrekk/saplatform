@@ -5,13 +5,11 @@ import time
 
 import MySQLdb
 import paramiko
-# import svn.local
-# import svn.remote
 
 from req import http_error
 
 
-def git_co(request, git_url, branch, key_path, local_path):
+def git_co(git_url, branch, key_path, local_path):
     if os.path.exists(local_path):
         os.chdir(local_path)
         os.system('GIT_SSH=%s' % key_path)
@@ -23,50 +21,19 @@ def git_co(request, git_url, branch, key_path, local_path):
             os.system('GIT_SSH=%s' % key_path)
             os.system('git clone %s %s' % (git_url, local_path))
         except:
-            return http_error(request, u'代码拉取失败')
+            pass
     if branch:
         try:
             os.chdir(local_path)
             os.system('git checkout %s' % branch)
         except:
-            return http_error(request, u'没有分支')
+            pass
 
 
 def git_hash(local_path):
     p = subprocess.Popen('cd %s && git log -1 --pretty=format:"%%H"' % local_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout, stderr = p.communicate()
     return stdout[:6]
-
-
-# def svn_co(svn_url, local_path, versionnum, username, password):
-#     if os.path.exists(local_path):
-#         pass
-#     else:
-#         os.makedirs(local_path)
-#     if username and password:
-#         # os.system('svn co %s %s --username %s --password %s' % (svn_url, local_path, username, password))
-#         r = svn.remote.RemoteClient(svn_url, username=username, password=password)
-#     else:
-#         # os.system('svn co %s %s' % (svn_url, local_path))
-#         r = svn.remote.RemoteClient(svn_url)
-#     if str(versionnum):
-#         r.checkout(local_path)
-#         os.chdir(local_path)
-#         os.system('svn up -r %s' % str(versionnum))
-#     else:
-#         r.checkout(local_path)
-#
-#
-# def svn_version(local_path):
-#     s = svn.local.LocalClient(local_path)
-#     version_num = s.info()['commit#revision']
-#     return version_num
-#
-#
-# def svn_commit(local_path, committext):
-#     commit_cmd = 'svn add --force * && svn commit -m "%s"' % str(committext)
-#     os.chdir(local_path)
-#     os.system(commit_cmd)
 
 
 def mkdir(dir_name, username='', mode=0755):

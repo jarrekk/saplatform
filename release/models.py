@@ -59,3 +59,4 @@ class RollBack(models.Model):
     branch = models.CharField(max_length=64, null=True, blank=True)
     hash = models.CharField(max_length=16, null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    in_use = models.BooleanField(default=False)

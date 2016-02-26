@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Autoops | 运维版本发布{% endblock %}
+{% block title %}Autoops | 版本回退{% endblock %}
 {% block breadcrumb %}
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>正式环境发布</h2>
+        <h2>版本回退</h2>
         <ol class="breadcrumb">
             <li>
                 <a href={% url 'index' %}>首页</a>
@@ -12,7 +12,7 @@
             <a>项目管理</a>
             </li>
             <li class="active">
-            <strong>正式环境发布</strong>
+            <strong>版本回退</strong>
             </li>
         </ol>
     </div>
@@ -51,22 +51,22 @@
             <th data-sortable="true" >项目名</th>
             <th data-sortable="true">分支名</th>
             <th data-sortable="true">hash值</th>
-            <th data-sortable="true">描述</th>
-            <th data-sortable="true">发布</th>
+            <th data-sortable="true">发布时间</th>
+            <th data-sortable="true">操作</th>
         </tr>
     </thead>
                             <tbody>
-                                {% for j in pre_records %}
+                                {% for j in rollbacks %}
                             {% ifequal i j.project %}
         <tr>
             <td>{{ j.project }}</td>
             <td>{{ j.branch }}</td>
             <td>{{ j.hash }}</td>
-            <td>{{ j.desc }}</td>
+            <td>{{ j.time }}</td>
             <td>
                 {% if perms.release.view_project %}
-                    <a href={% url "pro_release" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-primary" data-style="zoom-in">正  式</a>
-                    <a href={% url "del_pre_release" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-danger" data-style="zoom-in">删  除</a>
+                    <a href={% url "exec_rollback" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-primary" data-style="zoom-in">回  滚</a>
+                    <a href={% url "del_rollback" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-primary" data-style="zoom-in">删  除</a>
                 {% endif %}
             </td>
         </tr>
@@ -85,21 +85,22 @@
             <th data-sortable="true" >项目名</th>
             <th data-sortable="true">分支名</th>
             <th data-sortable="true">hash值</th>
-            <th data-sortable="true">描述</th>
-            <th data-sortable="true">发布</th>
+            <th data-sortable="true">发布时间</th>
+            <th data-sortable="true">操作</th>
         </tr>
     </thead>
                             <tbody>
-                                {% for j in pre_records %}
+                                {% for j in rollbacks %}
                             {% ifequal i j.project %}
         <tr>
             <td>{{ j.project }}</td>
             <td>{{ j.branch }}</td>
             <td>{{ j.hash }}</td>
-            <td>{{ j.desc }}</td>
+            <td>{{ j.time }}</td>
             <td>
                 {% if perms.release.view_project %}
                     <a href={% url "pro_release" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-primary" data-style="zoom-in">正  式</a>
+                    <a href={% url "del_rollback" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-primary" data-style="zoom-in">正  式</a>
                 {% endif %}
             </td>
         </tr>

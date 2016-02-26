@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, RequestContext
 
 from saplatform.api import http_success, admin_required, en2cn, alert
-from saplatform.settings import EMAIL_HOST_USER, LOCAL_URL
+from saplatform.settings import EMAIL_HOST_USER
 from users.forms import UserPermForm, AddGroupFrom, AddUserFrom, LoginForm, ChangePasswordForm, ForgetPasswordForm, \
     ProfileFrom, GroupPermForm
 from users.models import UserPerm, GroupPerm

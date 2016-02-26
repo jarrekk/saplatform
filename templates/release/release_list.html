@@ -44,8 +44,8 @@
             <thead>
                 <tr>
                     <th data-sortable="true" >项目名称</th>
-                    <th data-sortable="true">发布环境</th>
-                    <th data-sortable="true">发布版本</th>
+                    <th data-sortable="true">发布分支</th>
+                    <th data-sortable="true">hash值</th>
                     <th data-sortable="true">发布时间</th>
                     <th data-sortable="true">发布人</th>
                 </tr>
@@ -54,9 +54,8 @@
         {% for i in releases %}
                 <tr>
                     <td>{{ i.project }}</td>
-                    <td>{{ i.environment }}</td>
-                    <td>{{ i.no_version }}</td>
-                    <td>{{ i.release_time }}</td>
+                    <td>{{ i.branch }}</td>
+                    <td>{{ i.hash }}</td>
                     <td>{{ i.release_user }}</td>
                 </tr>
         {% endfor %}
