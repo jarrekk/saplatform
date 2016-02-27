@@ -77,14 +77,14 @@ def test(request):
 
 @permission_required('release.view_test', login_url='perm_deny')
 def test_release(request, ID):
+    the_release = Test.objects.get(id=str(ID))
     try:
         branch = request.GET["branch"]
     except:
         branch = ''
-    if PreRecord.objects.all() and PreRecord.objects.all()[0].test_id == ID:
+    if PreRecord.objects.filter(project=the_release.project):
         http_error(request, u'发布失败,请查看预发布记录')
     else:
-        the_release = Test.objects.all().get(id=str(ID))
         host_list, server_path, stdout, before_cmd, after_cmd = list(eval(the_release.host_list)), os.path.abspath(
                 the_release.server_path), '', the_release.before_cmd, the_release.after_cmd
         the_project = Project.objects.get(name=the_release.project)
@@ -135,8 +135,9 @@ def pro_release(request, ID):
         pro_host_list = list(eval(the_project.pro_host_list))
         ln_path = os.path.abspath(the_project.server_path)
         test_server_path = os.path.abspath(the_release.server_path)
-        pro_server_path = os.path.abspath(the_project.server_path)+"_%s" % the_release.last_hash
-        local_path = os.path.join('/ops/%s' % the_project.name, test_server_path.lstrip('/'), str(ID))
+        pro_server_path = os.path.abspath(the_project.server_path) + "_%s" % the_release.last_hash
+        local_path = os.path.join('/ops/%s' % the_project.name, test_server_path.lstrip('/'),
+                                  str(the_pre_record.test_id))
         host_list_str = ','.join(pro_host_list)
         salt = SaltApi(SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD)
         salt.login()
@@ -177,7 +178,7 @@ def del_rollback(request, ID):
         http_error(request, u'不能删除正在使用的版本')
     else:
         the_project = Project.objects.get(name=the_rollback.project)
-        pro_server_path = os.path.abspath(the_project.server_path)+"_%s" % the_rollback.hash
+        pro_server_path = os.path.abspath(the_project.server_path) + "_%s" % the_rollback.hash
         pro_host_list = list(eval(the_project.pro_host_list))
         host_list_str = ','.join(pro_host_list)
         salt = SaltApi(SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD)
@@ -199,7 +200,7 @@ def exec_rollback(request, ID):
         old_rollback.save()
         the_project = Project.objects.get(name=the_rollback.project)
         ln_path = os.path.abspath(the_project.server_path)
-        pro_server_path = os.path.abspath(the_project.server_path)+"_%s" % the_rollback.hash
+        pro_server_path = os.path.abspath(the_project.server_path) + "_%s" % the_rollback.hash
         pro_host_list = list(eval(the_project.pro_host_list))
         host_list_str = ','.join(pro_host_list)
         salt = SaltApi(SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD)
