@@ -147,9 +147,12 @@ def pro_release(request, ID):
             result = stdout.replace('\n', '</br>')
         salt.cmd(host_list_str, 'ln -s %s %s' % (pro_server_path, ln_path))
         salt.logout()
-        the_rollback = RollBack.objects.get(in_use=True)
-        the_rollback.in_use = False
-        the_rollback.save()
+        try:
+            the_rollback = RollBack.objects.get(in_use=True)
+            the_rollback.in_use = False
+            the_rollback.save()
+        except:
+            pass
         i_roll_back = RollBack(project=the_project.name,
                                branch=the_release.last_branch,
                                hash=the_release.last_hash,
