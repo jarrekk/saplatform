@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 
                        url(r'^rollback/$', 'release.views.rollback', name='rollback'),
                        url(r'^exec_rollback/(?P<ID>\d+)/$', 'release.views.exec_rollback', name='exec_rollback'),
+                       url(r'^del_rollback/(?P<ID>\d+)/$', 'release.views.del_rollback', name='del_rollback'),
                        url(r'^release_record/$', 'release.views.release_record', name='release_record'),
 
                        )

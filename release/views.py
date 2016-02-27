@@ -179,7 +179,7 @@ def rollback(request):
 def del_rollback(request, ID):
     the_rollback = RollBack.objects.get(id=ID)
     if the_rollback.in_use:
-        http_error(request, u'不能删除正在使用的版本')
+        return http_error(request, u'不能删除正在使用的版本')
     else:
         the_project = Project.objects.get(name=the_rollback.project)
         pro_server_path = os.path.abspath(the_project.server_path) + "_%s" % the_rollback.hash
@@ -197,7 +197,7 @@ def del_rollback(request, ID):
 def exec_rollback(request, ID):
     the_rollback = RollBack.objects.get(id=ID)
     if the_rollback.in_use:
-        http_error(request, u'正式环境为此版本')
+        return http_error(request, u'正式环境为此版本')
     else:
         old_rollback = RollBack.objects.get(in_use=True)
         old_rollback.in_use = False
