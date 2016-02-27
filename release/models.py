@@ -7,12 +7,8 @@ from django.db import models
 class Test(models.Model):
     name = models.CharField(max_length=64, unique=True)
     project = models.CharField(max_length=64, blank=True, null=True)
-    # code_type = models.CharField(max_length=24, blank=True, null=True)
-    # repo_type = models.CharField(max_length=16, blank=True, null=True)
-    # repo_url = models.CharField(max_length=256, blank=True, null=True)
     before_cmd = models.CharField(max_length=256, blank=True, null=True)
     after_cmd = models.CharField(max_length=256, blank=True, null=True)
-    # auth = models.IntegerField(blank=True, null=True)
     last_branch = models.CharField(max_length=64, null=True, blank=True)
     last_hash = models.CharField(max_length=16, null=True, blank=True)
     host_list = models.TextField(blank=True, null=True)
@@ -39,12 +35,10 @@ class Project(models.Model):
 
 class ReleaseRecord(models.Model):
     project = models.CharField(max_length=64, blank=True, null=True)
-    # environment = models.CharField(max_length=24, blank=True, null=True)
     branch = models.CharField(max_length=64, blank=True, null=True)
     hash = models.CharField(max_length=16, blank=True, null=True)
     release_time = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     release_user = models.CharField(max_length=64, blank=True, null=True)
-    # releaselog = models.TextField(blank=True, null=True)
 
 
 class PreRecord(models.Model):

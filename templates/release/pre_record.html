@@ -66,7 +66,7 @@
             <td>
                 {% if perms.release.view_project %}
                     <a href={% url "pro_release" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-primary" data-style="zoom-in">正  式</a>
-                    <a href={% url "del_pre_release" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-danger" data-style="zoom-in">删  除</a>
+                    <a href={% url "del_pre_record" j.id %} class="ladda-button btn btn-outline btn-w-m btn-xs btn-danger" data-style="zoom-in">删  除</a>
                 {% endif %}
             </td>
         </tr>

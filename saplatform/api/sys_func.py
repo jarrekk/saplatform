@@ -25,7 +25,9 @@ def git_co(git_url, branch, key_path, local_path):
     if branch:
         try:
             os.chdir(local_path)
+            os.system('git reset --merge')
             os.system('git checkout %s' % branch)
+            os.system('git pull')
         except:
             pass
 

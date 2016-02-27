@@ -11,7 +11,7 @@ from assets.models import Auth
 from release.forms import TestForm, ProjectForm
 from release.models import Project, ReleaseRecord, Test, PreRecord, RollBack
 from release.tasks import mail_task, git_co_task
-from saplatform.api import rrsync, set_log, git_co, http_success, http_error, paginator_fun, SaltApi
+from saplatform.api import rrsync, set_log, git_co, http_success, http_error, paginator_fun, SaltApi, git_hash
 from saplatform.settings import EMAIL_HOST_USER, SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD
 
 
@@ -82,8 +82,8 @@ def test_release(request, ID):
         branch = request.GET["branch"]
     except:
         branch = ''
-    if PreRecord.objects.filter(project=the_release.project):
-        http_error(request, u'发布失败,请查看预发布记录')
+    if PreRecord.objects.all().filter(project=the_release.project):
+        return http_error(request, u'发布失败,请查看预发布记录')
     else:
         host_list, server_path, stdout, before_cmd, after_cmd = list(eval(the_release.host_list)), os.path.abspath(
                 the_release.server_path), '', the_release.before_cmd, the_release.after_cmd
@@ -100,6 +100,7 @@ def test_release(request, ID):
             stdout = rrsync(local_path, i, server_path, ['.git*'])
             result = stdout.replace('\n', '</br>')
         the_release.last_branch = repo_branch
+        the_release.last_hash = git_hash(local_path)
         the_release.save()
         return render_to_response('release/release_result.html', locals(), RequestContext(request))
 
