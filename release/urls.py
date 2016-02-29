@@ -17,6 +17,7 @@ urlpatterns = patterns('',
 
                        url(r'^pre_record/$', 'release.views.pre_record', name='pre_record'),
                        url(r'^del_pre_record/(?P<ID>\d+)/$', 'release.views.del_pre_record', name='del_pre_record'),
+                       url(r'^complete_pre/(?P<ID>\d+)/$', 'release.views.complete_pre', name='complete_pre'),
 
                        url(r'^rollback/$', 'release.views.rollback', name='rollback'),
                        url(r'^exec_rollback/(?P<ID>\d+)/$', 'release.views.exec_rollback', name='exec_rollback'),

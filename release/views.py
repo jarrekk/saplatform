@@ -68,6 +68,26 @@ def del_pre_record(request, ID):
 
 
 @login_required()
+def complete_pre(request, ID):
+    the_pre_record = PreRecord.objects.get(id=ID)
+    the_release = Test.objects.all().get(id=the_pre_record.test_id)
+    the_project = Project.objects.get(name=the_release.project)
+    test_server_path = os.path.abspath(the_release.server_path)
+    local_path = os.path.join('/ops/%s' % the_project.name, test_server_path.lstrip('/'), str(the_pre_record.test_id))
+    branch = the_pre_record.branch
+    os.chdir(local_path)
+    os.system('git checkout master')
+    os.system('git pull')
+    os.system('git checkout %s' % branch)
+    os.system('git pull')
+    os.system('git checkout master')
+    os.system('git merge %s -m "merge"' % branch)
+    os.system('git push')
+    PreRecord.objects.get(id=ID).delete()
+    return render_to_response('release/pre_record.html', locals(), RequestContext(request))
+
+
+@login_required()
 def test(request):
     tests = Test.objects.all()
     for i in tests:
@@ -153,11 +173,11 @@ def pro_release(request, ID):
             the_rollback.save()
         except:
             pass
-        i_roll_back = RollBack(project=the_project.name,
+        i_rollback = RollBack(project=the_project.name,
                                branch=the_release.last_branch,
                                hash=the_release.last_hash,
                                in_use=True)
-        i_roll_back.save()
+        i_rollback.save()
         pro = ReleaseRecord(project=the_project.name,
                             branch=the_release.last_branch,
                             hash=the_release.last_hash,
@@ -209,6 +229,7 @@ def exec_rollback(request, ID):
         host_list_str = ','.join(pro_host_list)
         salt = SaltApi(SALTAPI_URL, SALTAPI_USER, SALTAPI_PASSWORD)
         salt.login()
+        salt.cmd(host_list_str, 'rm -f %s' % ln_path)
         salt.cmd(host_list_str, 'ln -s %s %s' % (pro_server_path, ln_path))
         salt.logout()
         the_rollback.in_use = True
