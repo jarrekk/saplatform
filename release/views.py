@@ -165,6 +165,7 @@ def pro_release(request, ID):
         for i in pro_host_list:
             stdout = rrsync(local_path, i, pro_server_path, ['.git*'])
             result = stdout.replace('\n', '</br>')
+        salt.cmd(host_list_str, 'rm -rf %s' % ln_path)
         salt.cmd(host_list_str, 'ln -s %s %s' % (pro_server_path, ln_path))
         salt.logout()
         try:
