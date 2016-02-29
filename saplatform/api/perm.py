@@ -18,7 +18,9 @@ perm_dict = {
     'assets': u'资产',
     'auth': u'登录认证',
     'dbconfig': u'数据库配置',
-    'sqlresult': u'SQL执行结果'
+    'sqlresult': u'SQL执行结果',
+    'prerecord': u'预发布记录',
+    'rollback': u'回滚记录'
 }
 
 no_perm_list = ['auth', 'contenttypes', 'sessions', 'users', 'message', 'djcelery', 'guardian']
