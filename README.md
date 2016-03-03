@@ -43,54 +43,7 @@
 
 #### pip安装文件
 
-``` bash
-# pip freeze
-amqp==1.4.9
-anyjson==0.3.3
-backports-abc==0.4
-backports.ssl-match-hostname==3.5.0.1
-billiard==3.3.0.22
-celery==3.1.20
-certifi==2015.11.20.1
-decorator==4.0.6
-Django==1.8
-django-guardian==1.4.1
-dulwich==0.9.1
-funky==0.0.2
-futures==3.0.4
-gitdb==0.6.4
-ipython==4.0.3
-ipython-genutils==0.1.0
-Jinja2==2.8
-kombu==3.0.33
-MarkupSafe==0.23
-meld3==1.0.2
-msgpack-python==0.4.6
-MySQL-python==1.2.5
-paramiko==1.10.0
-path.py==8.1.2
-pexpect==4.0.1
-pickleshare==0.6
-ptyprocess==0.5
-pycrypto==2.6
-python-dateutil==2.2
-pytz==2015.7
-PyYAML==3.11
-pyzmq==15.2.0
-redis==2.10.5
-requests==2.9.1
-salt==2015.8.3
-salt-api==0.8.4.1
-simplegeneric==0.8.1
-singledispatch==3.4.0.3
-six==1.7.2
-smmap==0.9.0
-supervisor==3.2.1
-svn==0.3.36
-tornado==4.3
-traitlets==4.1.0
-uWSGI==2.0.12
-```
+请查看requirements.txt
 
 #### celery添加环境变量：
 
