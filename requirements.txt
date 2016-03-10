@@ -39,3 +39,4 @@ supervisor==3.2.2
 tornado==4.3
 traitlets==4.1.0
 uWSGI==2.0.12
+svn==0.3.36
