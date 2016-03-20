@@ -7,7 +7,7 @@ except:
 if platform.node() == "94_54":
     from base import *
     from product import *
-elif platform.node() == "JacksMacBookPro.local":
+elif platform.node() == "JackdeMacBook-Pro.local":
     from base import *
     from dev import *
 else:
