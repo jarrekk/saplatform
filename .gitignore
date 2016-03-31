@@ -6,6 +6,6 @@ celerybeat-schedule
 *.pyc
 *00??_*.py
 db.sqlite3
-*/settings/app_constant.py
-*/settings/product.py
+app_constant.py
+product.py
 static/sql/*.sql
