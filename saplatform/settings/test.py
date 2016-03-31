@@ -3,7 +3,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'autoops',
         'USER': 'sa',
-        'PASSWORD': 'zjddsa',
+        'PASSWORD': 'sa',
         'HOST': '192.168.10.80',
         'PORT': '3306',
     }
