@@ -11,9 +11,8 @@ urlpatterns = patterns('saplatform.views',
 
                        url(r'^perm_deny$', 'perm_deny', name='perm_deny'),
 
-                       # release model
                        url(r'^release/', include('release.urls')),
-                       # users model
+
                        url(r'^users/', include('users.urls')),
                        # assets model
                        url(r'^assets/', include('assets.urls')),
