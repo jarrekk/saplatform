@@ -128,3 +128,4 @@ EMAIL_TIMEOUT = 5
 LOG_DIRS = os.path.join(BASE_DIR, 'logs')
 
 SQL_DIRS = os.path.join(BASE_DIR, 'static/sql')
+
