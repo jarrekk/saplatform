@@ -177,3 +177,4 @@ if __name__ == '__main__':
 ```
 
 其次还需要安装redis，MySQL，saltstack，salt-api。
+
