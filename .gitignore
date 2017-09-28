@@ -9,3 +9,4 @@ db.sqlite3
 app_constant.py
 product.py
 static/sql/*.sql
+celerybeat-schedule
