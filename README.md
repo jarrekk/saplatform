@@ -52,7 +52,7 @@ export DJANGO_SETTINGS_MODULE=saplatform.settings
 
 #### supervisord(python2.7)配置示例：
 
-[supervisord.conf](supervidosr.conf)
+[supervisord.conf](https://github.com/jarrekk/saplatform/blob/master/supervisord.conf)
 
 tornado启动django: **t_server.py**
 
