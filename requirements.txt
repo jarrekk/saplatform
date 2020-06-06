@@ -19,7 +19,7 @@ pytz==2016.2
 PyYAML==3.11
 pyzmq==15.2.0
 redis==2.10.5
-requests==2.9.1
+requests==2.20.0
 #salt==2015.8.8
 #salt-api==0.8.4.1
 simplegeneric==0.8.1
